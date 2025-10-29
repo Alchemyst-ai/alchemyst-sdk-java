@@ -1,27 +1,27 @@
 # Alchemyst AI Java API Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.alchemyst_ai_sdk.api/alchemyst-ai-java)](https://central.sonatype.com/artifact/com.alchemyst_ai_sdk.api/alchemyst-ai-java/0.0.1)
-[![javadoc](https://javadoc.io/badge2/com.alchemyst_ai_sdk.api/alchemyst-ai-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.alchemyst_ai_sdk.api/alchemyst-ai-java/0.0.1)
+[![Maven Central](https://img.shields.io/maven-central/v/com.alchemyst_ai.sdk/alchemyst-ai-java)](https://central.sonatype.com/artifact/com.alchemyst_ai.sdk/alchemyst-ai-java/0.0.1)
+[![javadoc](https://javadoc.io/badge2/com.alchemyst_ai.sdk/alchemyst-ai-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.alchemyst_ai.sdk/alchemyst-ai-java/0.0.1)
 
 The Alchemyst AI Java SDK provides convenient access to the [Alchemyst AI REST API](https://docs.getalchemystai.com) from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [docs.getalchemystai.com](https://docs.getalchemystai.com). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.alchemyst_ai_sdk.api/alchemyst-ai-java/0.0.1).
+The REST API documentation can be found on [docs.getalchemystai.com](https://docs.getalchemystai.com). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.alchemyst_ai.sdk/alchemyst-ai-java/0.0.1).
 
 ## Installation
 
 ### Gradle
 
 ```kotlin
-implementation("com.alchemyst_ai_sdk.api:alchemyst-ai-java:0.0.1")
+implementation("com.alchemyst_ai.sdk:alchemyst-ai-java:0.0.1")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-  <groupId>com.alchemyst_ai_sdk.api</groupId>
+  <groupId>com.alchemyst_ai.sdk</groupId>
   <artifactId>alchemyst-ai-java</artifactId>
   <version>0.0.1</version>
 </dependency>
@@ -34,10 +34,10 @@ This library requires Java 8 or later.
 ## Usage
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddResponse;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddResponse;
 
 // Configures using the `alchemystai.apiKey` and `alchemystai.baseUrl` system properties
 // Or configures using the `ALCHEMYST_AI_API_KEY` and `ALCHEMYST_AI_BASE_URL` environment variables
@@ -65,8 +65,8 @@ ContextAddResponse response = client.v1().context().add(params);
 Configure the client using system properties or environment variables:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 
 // Configures using the `alchemystai.apiKey` and `alchemystai.baseUrl` system properties
 // Or configures using the `ALCHEMYST_AI_API_KEY` and `ALCHEMYST_AI_BASE_URL` environment variables
@@ -76,8 +76,8 @@ AlchemystAiClient client = AlchemystAiOkHttpClient.fromEnv();
 Or manually:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 
 AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
     .apiKey("My API Key")
@@ -87,8 +87,8 @@ AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
 Or using a combination of the two approaches:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 
 AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
     // Configures using the `alchemystai.apiKey` and `alchemystai.baseUrl` system properties
@@ -116,7 +116,7 @@ System properties take precedence over environment variables.
 To temporarily use a modified client configuration, while reusing the same connection and thread pools, call `withOptions()` on any client or service:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
 
 AlchemystAiClient clientWithOptions = client.withOptions(optionsBuilder -> {
     optionsBuilder.baseUrl("https://example.com");
@@ -145,10 +145,10 @@ Because each class is immutable, builder modification will _never_ affect alread
 The default client is synchronous. To switch to asynchronous execution, call the `async()` method:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddResponse;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `alchemystai.apiKey` and `alchemystai.baseUrl` system properties
@@ -175,10 +175,10 @@ CompletableFuture<ContextAddResponse> response = client.async().v1().context().a
 Or create an asynchronous client from the beginning:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClientAsync;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClientAsync;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddResponse;
+import com.alchemyst_ai.sdk.client.AlchemystAiClientAsync;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClientAsync;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `alchemystai.apiKey` and `alchemystai.baseUrl` system properties
@@ -211,10 +211,10 @@ The SDK defines methods that deserialize responses into instances of Java classe
 To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
 
 ```java
-import com.alchemyst_ai_sdk.api.core.http.Headers;
-import com.alchemyst_ai_sdk.api.core.http.HttpResponseFor;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddResponse;
+import com.alchemyst_ai.sdk.core.http.Headers;
+import com.alchemyst_ai.sdk.core.http.HttpResponseFor;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddResponse;
 
 ContextAddParams params = ContextAddParams.builder()
     .contextType(ContextAddParams.ContextType.RESOURCE)
@@ -239,7 +239,7 @@ Headers headers = response.headers();
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddResponse;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddResponse;
 
 ContextAddResponse parsedResponse = response.parse();
 ```
@@ -248,26 +248,26 @@ ContextAddResponse parsedResponse = response.parse();
 
 The SDK throws custom unchecked exception types:
 
-- [`AlchemystAiServiceException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/AlchemystAiServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
+- [`AlchemystAiServiceException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/AlchemystAiServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                                                                                                                                  |
-  | ------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-  | 400    | [`BadRequestException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/BadRequestException.kt)                     |
-  | 401    | [`UnauthorizedException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/UnauthorizedException.kt)                 |
-  | 403    | [`PermissionDeniedException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/PermissionDeniedException.kt)         |
-  | 404    | [`NotFoundException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/NotFoundException.kt)                         |
-  | 422    | [`UnprocessableEntityException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/UnprocessableEntityException.kt)   |
-  | 429    | [`RateLimitException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/RateLimitException.kt)                       |
-  | 5xx    | [`InternalServerException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/InternalServerException.kt)             |
-  | others | [`UnexpectedStatusCodeException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/UnexpectedStatusCodeException.kt) |
+  | Status | Exception                                                                                                                              |
+  | ------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+  | 400    | [`BadRequestException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/BadRequestException.kt)                     |
+  | 401    | [`UnauthorizedException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/UnauthorizedException.kt)                 |
+  | 403    | [`PermissionDeniedException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/PermissionDeniedException.kt)         |
+  | 404    | [`NotFoundException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/NotFoundException.kt)                         |
+  | 422    | [`UnprocessableEntityException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/UnprocessableEntityException.kt)   |
+  | 429    | [`RateLimitException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/RateLimitException.kt)                       |
+  | 5xx    | [`InternalServerException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/InternalServerException.kt)             |
+  | others | [`UnexpectedStatusCodeException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/UnexpectedStatusCodeException.kt) |
 
-- [`AlchemystAiIoException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/AlchemystAiIoException.kt): I/O networking errors.
+- [`AlchemystAiIoException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/AlchemystAiIoException.kt): I/O networking errors.
 
-- [`AlchemystAiRetryableException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/AlchemystAiRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+- [`AlchemystAiRetryableException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/AlchemystAiRetryableException.kt): Generic error indicating a failure that could be retried by the client.
 
-- [`AlchemystAiInvalidDataException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/AlchemystAiInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
+- [`AlchemystAiInvalidDataException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/AlchemystAiInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
-- [`AlchemystAiException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/AlchemystAiException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
+- [`AlchemystAiException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/AlchemystAiException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Logging
 
@@ -297,7 +297,7 @@ The SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON seri
 
 The SDK throws an exception if it detects an incompatible Jackson version at runtime (e.g. if the default version was overridden in your Maven or Gradle config).
 
-If the SDK threw an exception, but you're _certain_ the version is compatible, then disable the version check using the `checkJacksonVersionCompatibility` on [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClient.kt) or [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClientAsync.kt).
+If the SDK threw an exception, but you're _certain_ the version is compatible, then disable the version check using the `checkJacksonVersionCompatibility` on [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClient.kt) or [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClientAsync.kt).
 
 > [!CAUTION]
 > We make no guarantee that the SDK works correctly when the Jackson version check is disabled.
@@ -321,8 +321,8 @@ The API may also explicitly instruct the SDK to retry or not retry a request.
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 
 AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
     .fromEnv()
@@ -337,7 +337,7 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddResponse;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddResponse;
 
 ContextAddResponse response = client.v1().context().add(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build());
 ```
@@ -345,8 +345,8 @@ ContextAddResponse response = client.v1().context().add(RequestOptions.builder()
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 import java.time.Duration;
 
 AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
@@ -360,8 +360,8 @@ AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
 To route requests through a proxy, configure the client using the `proxy` method:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
@@ -384,8 +384,8 @@ AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
 To configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`, `trustManager`, and `hostnameVerifier` methods:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 
 AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
     .fromEnv()
@@ -403,10 +403,10 @@ The SDK consists of three artifacts:
 - `alchemyst-ai-java-core`
   - Contains core SDK logic
   - Does not depend on [OkHttp](https://square.github.io/okhttp)
-  - Exposes [`AlchemystAiClient`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClient.kt), [`AlchemystAiClientAsync`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientAsync.kt), [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientImpl.kt), and [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientAsyncImpl.kt), all of which can work with any HTTP client
+  - Exposes [`AlchemystAiClient`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClient.kt), [`AlchemystAiClientAsync`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientAsync.kt), [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientImpl.kt), and [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientAsyncImpl.kt), all of which can work with any HTTP client
 - `alchemyst-ai-java-client-okhttp`
   - Depends on [OkHttp](https://square.github.io/okhttp)
-  - Exposes [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClient.kt) and [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClientAsync.kt), which provide a way to construct [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientImpl.kt) and [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientAsyncImpl.kt), respectively, using OkHttp
+  - Exposes [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClient.kt) and [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClientAsync.kt), which provide a way to construct [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientImpl.kt) and [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientAsyncImpl.kt), respectively, using OkHttp
 - `alchemyst-ai-java`
   - Depends on and exposes the APIs of both `alchemyst-ai-java-core` and `alchemyst-ai-java-client-okhttp`
   - Does not have its own logic
@@ -421,16 +421,16 @@ This structure allows replacing the SDK's default HTTP client without pulling in
 To use a customized `OkHttpClient`:
 
 1. Replace your [`alchemyst-ai-java` dependency](#installation) with `alchemyst-ai-java-core`
-2. Copy `alchemyst-ai-java-client-okhttp`'s [`OkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/OkHttpClient.kt) class into your code and customize it
-3. Construct [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientImpl.kt) or [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientAsyncImpl.kt), similarly to [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClient.kt) or [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClientAsync.kt), using your customized client
+2. Copy `alchemyst-ai-java-client-okhttp`'s [`OkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/OkHttpClient.kt) class into your code and customize it
+3. Construct [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientImpl.kt) or [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientAsyncImpl.kt), similarly to [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClient.kt) or [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClientAsync.kt), using your customized client
 
 ### Completely custom HTTP client
 
 To use a completely custom HTTP client:
 
 1. Replace your [`alchemyst-ai-java` dependency](#installation) with `alchemyst-ai-java-core`
-2. Write a class that implements the [`HttpClient`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/core/http/HttpClient.kt) interface
-3. Construct [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientImpl.kt) or [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/client/AlchemystAiClientAsyncImpl.kt), similarly to [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClient.kt) or [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai_sdk/api/client/okhttp/AlchemystAiOkHttpClientAsync.kt), using your new client class
+2. Write a class that implements the [`HttpClient`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/core/http/HttpClient.kt) interface
+3. Construct [`AlchemystAiClientImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientImpl.kt) or [`AlchemystAiClientAsyncImpl`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/client/AlchemystAiClientAsyncImpl.kt), similarly to [`AlchemystAiOkHttpClient`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClient.kt) or [`AlchemystAiOkHttpClientAsync`](alchemyst-ai-java-client-okhttp/src/main/kotlin/com/alchemyst_ai/sdk/client/okhttp/AlchemystAiOkHttpClientAsync.kt), using your new client class
 
 ## Undocumented API functionality
 
@@ -441,8 +441,8 @@ The SDK is typed for convenient usage of the documented API. However, it also su
 To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or `putAdditionalBodyProperty` methods on any `Params` class:
 
 ```java
-import com.alchemyst_ai_sdk.api.core.JsonValue;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.core.JsonValue;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
 
 ContextAddParams params = ContextAddParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -456,8 +456,8 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set undocumented parameters on _nested_ headers, query params, or body classes, call the `putAdditionalProperty` method on the nested class:
 
 ```java
-import com.alchemyst_ai_sdk.api.core.JsonValue;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.core.JsonValue;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
 
 ContextAddParams params = ContextAddParams.builder()
     .metadata(ContextAddParams.Metadata.builder()
@@ -468,11 +468,11 @@ ContextAddParams params = ContextAddParams.builder()
 
 These properties can be accessed on the nested built object later using the `_additionalProperties()` method.
 
-To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/core/Values.kt) object to its setter:
+To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/core/Values.kt) object to its setter:
 
 ```java
-import com.alchemyst_ai_sdk.api.core.JsonValue;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.core.JsonValue;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
 
 ContextAddParams params = ContextAddParams.builder()
     .contextType(JsonValue.from(42))
@@ -490,10 +490,10 @@ ContextAddParams params = ContextAddParams.builder()
     .build();
 ```
 
-The most straightforward way to create a [`JsonValue`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/core/Values.kt) is using its `from(...)` method:
+The most straightforward way to create a [`JsonValue`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/core/Values.kt) is using its `from(...)` method:
 
 ```java
-import com.alchemyst_ai_sdk.api.core.JsonValue;
+import com.alchemyst_ai.sdk.core.JsonValue;
 import java.util.List;
 import java.util.Map;
 
@@ -531,12 +531,12 @@ JsonValue complexValue = JsonValue.from(Map.of(
 
 Normally a `Builder` class's `build` method will throw [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html) if any required parameter or property is unset.
 
-To forcibly omit a required parameter or property, pass [`JsonMissing`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/core/Values.kt):
+To forcibly omit a required parameter or property, pass [`JsonMissing`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/core/Values.kt):
 
 ```java
-import com.alchemyst_ai_sdk.api.core.JsonMissing;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddParams;
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextSearchParams;
+import com.alchemyst_ai.sdk.core.JsonMissing;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddParams;
+import com.alchemyst_ai.sdk.models.v1.context.ContextSearchParams;
 
 ContextAddParams params = ContextSearchParams.builder()
     .query("search query for user preferences")
@@ -550,7 +550,7 @@ ContextAddParams params = ContextSearchParams.builder()
 To access undocumented response properties, call the `_additionalProperties()` method:
 
 ```java
-import com.alchemyst_ai_sdk.api.core.JsonValue;
+import com.alchemyst_ai.sdk.core.JsonValue;
 import java.util.Map;
 
 Map<String, JsonValue> additionalProperties = client.v1().context().search(params)._additionalProperties();
@@ -580,7 +580,7 @@ String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
 To access a property's raw JSON value, which may be undocumented, call its `_` prefixed method:
 
 ```java
-import com.alchemyst_ai_sdk.api.core.JsonField;
+import com.alchemyst_ai.sdk.core.JsonField;
 import java.util.Optional;
 
 JsonField<Double> minimumSimilarityThreshold = client.v1().context().search(params)._minimumSimilarityThreshold();
@@ -603,12 +603,12 @@ if (minimumSimilarityThreshold.isMissing()) {
 
 In rare cases, the API may return a response that doesn't match the expected type. For example, the SDK may expect a property to contain a `String`, but the API could return something else.
 
-By default, the SDK will not throw an exception in this case. It will throw [`AlchemystAiInvalidDataException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai_sdk/api/errors/AlchemystAiInvalidDataException.kt) only if you directly access the property.
+By default, the SDK will not throw an exception in this case. It will throw [`AlchemystAiInvalidDataException`](alchemyst-ai-java-core/src/main/kotlin/com/alchemyst_ai/sdk/errors/AlchemystAiInvalidDataException.kt) only if you directly access the property.
 
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextSearchResponse;
+import com.alchemyst_ai.sdk.models.v1.context.ContextSearchResponse;
 
 ContextSearchResponse response = client.v1().context().search(params).validate();
 ```
@@ -616,7 +616,7 @@ ContextSearchResponse response = client.v1().context().search(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.alchemyst_ai_sdk.api.models.v1.context.ContextAddResponse;
+import com.alchemyst_ai.sdk.models.v1.context.ContextAddResponse;
 
 ContextAddResponse response = client.v1().context().add(RequestOptions.builder().responseValidation(true).build());
 ```
@@ -624,8 +624,8 @@ ContextAddResponse response = client.v1().context().add(RequestOptions.builder()
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.alchemyst_ai_sdk.api.client.AlchemystAiClient;
-import com.alchemyst_ai_sdk.api.client.okhttp.AlchemystAiOkHttpClient;
+import com.alchemyst_ai.sdk.client.AlchemystAiClient;
+import com.alchemyst_ai.sdk.client.okhttp.AlchemystAiOkHttpClient;
 
 AlchemystAiClient client = AlchemystAiOkHttpClient.builder()
     .fromEnv()
