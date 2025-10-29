@@ -1,5 +1,5 @@
 # Specify the entrypoint where ProGuard starts to determine what's reachable.
--keep class com.alchemyst_ai_sdk.api.proguard.** { *; }
+-keep class com.alchemyst_ai.sdk.proguard.** { *; }
 
 # For the testing framework.
 -keep class org.junit.** { *; }

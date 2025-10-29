@@ -8,7 +8,7 @@ repositories {
 }
 
 allprojects {
-    group = "com.alchemyst_ai_sdk.api"
+    group = "com.alchemyst_ai.sdk"
     version = "0.0.1"
 }
 
