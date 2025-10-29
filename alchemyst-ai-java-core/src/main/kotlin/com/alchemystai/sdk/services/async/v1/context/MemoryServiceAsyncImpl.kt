@@ -16,6 +16,7 @@ import com.alchemystai.sdk.core.http.parseable
 import com.alchemystai.sdk.core.prepareAsync
 import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -30,6 +31,13 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MemoryServiceAsync =
         MemoryServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+    override fun update(
+        params: MemoryUpdateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // post /api/v1/context/memory/update
+        withRawResponse().update(params, requestOptions).thenAccept {}
 
     override fun delete(
         params: MemoryDeleteParams,
@@ -57,6 +65,30 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
             MemoryServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
+
+        private val updateHandler: Handler<Void?> = emptyHandler()
+
+        override fun update(
+            params: MemoryUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("api", "v1", "context", "memory", "update")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response.use { updateHandler.handle(it) }
+                    }
+                }
+        }
 
         private val deleteHandler: Handler<Void?> = emptyHandler()
 

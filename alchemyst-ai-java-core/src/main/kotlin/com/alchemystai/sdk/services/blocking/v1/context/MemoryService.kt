@@ -7,6 +7,7 @@ import com.alchemystai.sdk.core.RequestOptions
 import com.alchemystai.sdk.core.http.HttpResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -23,6 +24,22 @@ interface MemoryService {
      * The original service is not modified.
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): MemoryService
+
+    /** This endpoint updates memory context data. */
+    fun update() = update(MemoryUpdateParams.none())
+
+    /** @see update */
+    fun update(
+        params: MemoryUpdateParams = MemoryUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
+
+    /** @see update */
+    fun update(params: MemoryUpdateParams = MemoryUpdateParams.none()) =
+        update(params, RequestOptions.none())
+
+    /** @see update */
+    fun update(requestOptions: RequestOptions) = update(MemoryUpdateParams.none(), requestOptions)
 
     /** Deletes memory context data based on provided parameters */
     fun delete() = delete(MemoryDeleteParams.none())
@@ -64,6 +81,29 @@ interface MemoryService {
          * The original service is not modified.
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): MemoryService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /api/v1/context/memory/update`, but is otherwise
+         * the same as [MemoryService.update].
+         */
+        @MustBeClosed fun update(): HttpResponse = update(MemoryUpdateParams.none())
+
+        /** @see update */
+        @MustBeClosed
+        fun update(
+            params: MemoryUpdateParams = MemoryUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /** @see update */
+        @MustBeClosed
+        fun update(params: MemoryUpdateParams = MemoryUpdateParams.none()): HttpResponse =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        @MustBeClosed
+        fun update(requestOptions: RequestOptions): HttpResponse =
+            update(MemoryUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/memory/delete`, but is otherwise
