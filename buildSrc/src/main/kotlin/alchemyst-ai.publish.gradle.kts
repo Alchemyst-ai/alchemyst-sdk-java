@@ -27,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/alchemyst-ai-sdk-java.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/alchemyst-ai-sdk-java.git")
-                    url.set("https://github.com/stainless-sdks/alchemyst-ai-sdk-java")
+                    connection.set("scm:git:git://github.com/Alchemyst-ai/alchemyst-sdk-java.git")
+                    developerConnection.set("scm:git:git://github.com/Alchemyst-ai/alchemyst-sdk-java.git")
+                    url.set("https://github.com/Alchemyst-ai/alchemyst-sdk-java")
                 }
 
                 versionMapping {
