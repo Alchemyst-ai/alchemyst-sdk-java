@@ -196,6 +196,7 @@ private constructor(
          */
         fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("createdAt")
 
+        /** Only included when query parameter metadata=true */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
 
         /**
@@ -304,6 +305,7 @@ private constructor(
                 this.createdAt = createdAt
             }
 
+            /** Only included when query parameter metadata=true */
             fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
 
             fun score(score: Double) = score(JsonField.of(score))

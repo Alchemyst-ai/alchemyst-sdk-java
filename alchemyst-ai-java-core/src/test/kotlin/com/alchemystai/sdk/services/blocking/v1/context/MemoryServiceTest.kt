@@ -26,8 +26,17 @@ internal class MemoryServiceTest {
 
         memoryService.update(
             MemoryUpdateParams.builder()
-                .addContent(MemoryUpdateParams.Content.builder().content("content").build())
-                .memoryId("memoryId")
+                .addContent(
+                    MemoryUpdateParams.Content.builder()
+                        .content("Customer asked about pricing for the Scale plan.")
+                        .build()
+                )
+                .addContent(
+                    MemoryUpdateParams.Content.builder()
+                        .content("Updated answer about the Scale plan pricing after discounts.")
+                        .build()
+                )
+                .memoryId("support-thread-TCK-1234")
                 .build()
         )
     }
@@ -44,7 +53,7 @@ internal class MemoryServiceTest {
 
         memoryService.delete(
             MemoryDeleteParams.builder()
-                .memoryId("memoryId")
+                .memoryId("support-thread-TCK-1234")
                 .organizationId("organization_id")
                 .userId("user_id")
                 .build()
@@ -63,8 +72,19 @@ internal class MemoryServiceTest {
 
         memoryService.add(
             MemoryAddParams.builder()
-                .addContent(MemoryAddParams.Content.builder().content("content").build())
-                .memoryId("memoryId")
+                .addContent(
+                    MemoryAddParams.Content.builder()
+                        .content("Customer asked about pricing for the Scale plan.")
+                        .build()
+                )
+                .addContent(
+                    MemoryAddParams.Content.builder()
+                        .content(
+                            "Explained the Scale plan pricing and shared the pricing page link."
+                        )
+                        .build()
+                )
+                .memoryId("support-thread-TCK-1234")
                 .build()
         )
     }

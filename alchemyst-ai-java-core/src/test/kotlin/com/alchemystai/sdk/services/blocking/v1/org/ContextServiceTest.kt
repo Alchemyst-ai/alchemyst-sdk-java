@@ -22,7 +22,10 @@ internal class ContextServiceTest {
                 .build()
         val contextService = client.v1().org().context()
 
-        val response = contextService.view(ContextViewParams.builder().addUserId("string").build())
+        val response =
+            contextService.view(
+                ContextViewParams.builder().addUserId("user_123").addUserId("user_456").build()
+            )
 
         response.validate()
     }

@@ -11,8 +11,17 @@ internal class MemoryUpdateParamsTest {
     @Test
     fun create() {
         MemoryUpdateParams.builder()
-            .addContent(MemoryUpdateParams.Content.builder().content("content").build())
-            .memoryId("memoryId")
+            .addContent(
+                MemoryUpdateParams.Content.builder()
+                    .content("Customer asked about pricing for the Scale plan.")
+                    .build()
+            )
+            .addContent(
+                MemoryUpdateParams.Content.builder()
+                    .content("Updated answer about the Scale plan pricing after discounts.")
+                    .build()
+            )
+            .memoryId("support-thread-TCK-1234")
             .build()
     }
 
@@ -20,15 +29,31 @@ internal class MemoryUpdateParamsTest {
     fun body() {
         val params =
             MemoryUpdateParams.builder()
-                .addContent(MemoryUpdateParams.Content.builder().content("content").build())
-                .memoryId("memoryId")
+                .addContent(
+                    MemoryUpdateParams.Content.builder()
+                        .content("Customer asked about pricing for the Scale plan.")
+                        .build()
+                )
+                .addContent(
+                    MemoryUpdateParams.Content.builder()
+                        .content("Updated answer about the Scale plan pricing after discounts.")
+                        .build()
+                )
+                .memoryId("support-thread-TCK-1234")
                 .build()
 
         val body = params._body()
 
         assertThat(body.contents().getOrNull())
-            .containsExactly(MemoryUpdateParams.Content.builder().content("content").build())
-        assertThat(body.memoryId()).contains("memoryId")
+            .containsExactly(
+                MemoryUpdateParams.Content.builder()
+                    .content("Customer asked about pricing for the Scale plan.")
+                    .build(),
+                MemoryUpdateParams.Content.builder()
+                    .content("Updated answer about the Scale plan pricing after discounts.")
+                    .build(),
+            )
+        assertThat(body.memoryId()).contains("support-thread-TCK-1234")
     }
 
     @Test

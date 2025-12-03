@@ -10,7 +10,7 @@ internal class MemoryDeleteParamsTest {
     @Test
     fun create() {
         MemoryDeleteParams.builder()
-            .memoryId("memoryId")
+            .memoryId("support-thread-TCK-1234")
             .organizationId("organization_id")
             .userId("user_id")
             .build()
@@ -20,14 +20,14 @@ internal class MemoryDeleteParamsTest {
     fun body() {
         val params =
             MemoryDeleteParams.builder()
-                .memoryId("memoryId")
+                .memoryId("support-thread-TCK-1234")
                 .organizationId("organization_id")
                 .userId("user_id")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.memoryId()).contains("memoryId")
+        assertThat(body.memoryId()).contains("support-thread-TCK-1234")
         assertThat(body.organizationId()).contains("organization_id")
         assertThat(body.userId()).contains("user_id")
     }

@@ -23,7 +23,9 @@ internal class ContextServiceAsyncTest {
         val contextServiceAsync = client.v1().org().context()
 
         val responseFuture =
-            contextServiceAsync.view(ContextViewParams.builder().addUserId("string").build())
+            contextServiceAsync.view(
+                ContextViewParams.builder().addUserId("user_123").addUserId("user_456").build()
+            )
 
         val response = responseFuture.get()
         response.validate()
