@@ -33,14 +33,14 @@ private constructor(
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun userIds(): List<String> = body.userIds()
+    @Deprecated("deprecated") fun userIds(): List<String> = body.userIds()
 
     /**
      * Returns the raw JSON value of [userIds].
      *
      * Unlike [userIds], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _userIds(): JsonField<List<String>> = body._userIds()
+    @Deprecated("deprecated") fun _userIds(): JsonField<List<String>> = body._userIds()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -88,6 +88,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        @Deprecated("deprecated")
         fun userIds(userIds: List<String>) = apply { body.userIds(userIds) }
 
         /**
@@ -97,6 +98,7 @@ private constructor(
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
+        @Deprecated("deprecated")
         fun userIds(userIds: JsonField<List<String>>) = apply { body.userIds(userIds) }
 
         /**
@@ -104,7 +106,7 @@ private constructor(
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addUserId(userId: String) = apply { body.addUserId(userId) }
+        @Deprecated("deprecated") fun addUserId(userId: String) = apply { body.addUserId(userId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -267,14 +269,17 @@ private constructor(
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun userIds(): List<String> = userIds.getRequired("userIds")
+        @Deprecated("deprecated") fun userIds(): List<String> = userIds.getRequired("userIds")
 
         /**
          * Returns the raw JSON value of [userIds].
          *
          * Unlike [userIds], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("userIds") @ExcludeMissing fun _userIds(): JsonField<List<String>> = userIds
+        @Deprecated("deprecated")
+        @JsonProperty("userIds")
+        @ExcludeMissing
+        fun _userIds(): JsonField<List<String>> = userIds
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -313,6 +318,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            @Deprecated("deprecated")
             fun userIds(userIds: List<String>) = userIds(JsonField.of(userIds))
 
             /**
@@ -322,6 +328,7 @@ private constructor(
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun userIds(userIds: JsonField<List<String>>) = apply {
                 this.userIds = userIds.map { it.toMutableList() }
             }
@@ -331,6 +338,7 @@ private constructor(
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
+            @Deprecated("deprecated")
             fun addUserId(userId: String) = apply {
                 userIds =
                     (userIds ?: JsonField.of(mutableListOf())).also {

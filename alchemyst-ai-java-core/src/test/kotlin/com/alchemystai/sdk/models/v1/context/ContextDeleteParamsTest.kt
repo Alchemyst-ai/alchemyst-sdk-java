@@ -11,9 +11,9 @@ internal class ContextDeleteParamsTest {
     fun create() {
         ContextDeleteParams.builder()
             .byDoc(true)
-            .byId(true)
+            .byId(false)
             .organizationId("organization_id")
-            .source("source")
+            .source("support-inbox")
             .userId("user_id")
             .build()
     }
@@ -23,18 +23,18 @@ internal class ContextDeleteParamsTest {
         val params =
             ContextDeleteParams.builder()
                 .byDoc(true)
-                .byId(true)
+                .byId(false)
                 .organizationId("organization_id")
-                .source("source")
+                .source("support-inbox")
                 .userId("user_id")
                 .build()
 
         val body = params._body()
 
         assertThat(body.byDoc()).contains(true)
-        assertThat(body.byId()).contains(true)
+        assertThat(body.byId()).contains(false)
         assertThat(body.organizationId()).contains("organization_id")
-        assertThat(body.source()).contains("source")
+        assertThat(body.source()).contains("support-inbox")
         assertThat(body.userId()).contains("user_id")
     }
 

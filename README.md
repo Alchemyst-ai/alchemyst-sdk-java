@@ -551,7 +551,7 @@ import com.alchemystai.sdk.models.v1.context.ContextAddParams;
 import com.alchemystai.sdk.models.v1.context.ContextSearchParams;
 
 ContextAddParams params = ContextSearchParams.builder()
-    .query("search query for user preferences")
+    .query("What did the customer ask about pricing for the Scale plan?")
     .similarityThreshold(0.8)
     .minimumSimilarityThreshold(JsonMissing.of())
     .build();

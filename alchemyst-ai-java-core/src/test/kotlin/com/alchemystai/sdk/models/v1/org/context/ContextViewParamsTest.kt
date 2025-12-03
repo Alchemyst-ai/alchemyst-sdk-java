@@ -9,15 +9,15 @@ internal class ContextViewParamsTest {
 
     @Test
     fun create() {
-        ContextViewParams.builder().addUserId("string").build()
+        ContextViewParams.builder().addUserId("user_123").addUserId("user_456").build()
     }
 
     @Test
     fun body() {
-        val params = ContextViewParams.builder().addUserId("string").build()
+        val params = ContextViewParams.builder().addUserId("user_123").addUserId("user_456").build()
 
         val body = params._body()
 
-        assertThat(body.userIds()).containsExactly("string")
+        assertThat(body.userIds()).containsExactly("user_123", "user_456")
     }
 }

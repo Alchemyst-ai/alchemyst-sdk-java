@@ -65,7 +65,7 @@ private constructor(
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun userId(): Optional<String> = body.userId()
+    @Deprecated("deprecated") fun userId(): Optional<String> = body.userId()
 
     /**
      * Returns the raw JSON value of [byDoc].
@@ -100,7 +100,7 @@ private constructor(
      *
      * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _userId(): JsonField<String> = body._userId()
+    @Deprecated("deprecated") fun _userId(): JsonField<String> = body._userId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -220,10 +220,10 @@ private constructor(
         fun source(source: JsonField<String>) = apply { body.source(source) }
 
         /** Optional user ID */
-        fun userId(userId: String?) = apply { body.userId(userId) }
+        @Deprecated("deprecated") fun userId(userId: String?) = apply { body.userId(userId) }
 
         /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
-        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+        @Deprecated("deprecated") fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
         /**
          * Sets [Builder.userId] to an arbitrary JSON value.
@@ -231,6 +231,7 @@ private constructor(
          * You should usually call [Builder.userId] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
+        @Deprecated("deprecated")
         fun userId(userId: JsonField<String>) = apply { body.userId(userId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -429,7 +430,7 @@ private constructor(
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
-        fun userId(): Optional<String> = userId.getOptional("user_id")
+        @Deprecated("deprecated") fun userId(): Optional<String> = userId.getOptional("user_id")
 
         /**
          * Returns the raw JSON value of [byDoc].
@@ -467,7 +468,10 @@ private constructor(
          *
          * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
+        @Deprecated("deprecated")
+        @JsonProperty("user_id")
+        @ExcludeMissing
+        fun _userId(): JsonField<String> = userId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -583,9 +587,11 @@ private constructor(
             fun source(source: JsonField<String>) = apply { this.source = source }
 
             /** Optional user ID */
+            @Deprecated("deprecated")
             fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
             /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+            @Deprecated("deprecated")
             fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
             /**
@@ -595,6 +601,7 @@ private constructor(
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
