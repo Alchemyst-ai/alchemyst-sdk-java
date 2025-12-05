@@ -55,6 +55,7 @@ private constructor(
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
+    @Deprecated("deprecated")
     fun minimumSimilarityThreshold(): Double = body.minimumSimilarityThreshold()
 
     /**
@@ -98,6 +99,7 @@ private constructor(
      * Unlike [minimumSimilarityThreshold], this method doesn't throw if the JSON field has an
      * unexpected type.
      */
+    @Deprecated("deprecated")
     fun _minimumSimilarityThreshold(): JsonField<Double> = body._minimumSimilarityThreshold()
 
     /**
@@ -209,6 +211,7 @@ private constructor(
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** Minimum similarity threshold */
+        @Deprecated("deprecated")
         fun minimumSimilarityThreshold(minimumSimilarityThreshold: Double) = apply {
             body.minimumSimilarityThreshold(minimumSimilarityThreshold)
         }
@@ -220,6 +223,7 @@ private constructor(
          * value instead. This method is primarily for setting the field to an undocumented or not
          * yet supported value.
          */
+        @Deprecated("deprecated")
         fun minimumSimilarityThreshold(minimumSimilarityThreshold: JsonField<Double>) = apply {
             body.minimumSimilarityThreshold(minimumSimilarityThreshold)
         }
@@ -471,6 +475,7 @@ private constructor(
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun minimumSimilarityThreshold(): Double =
             minimumSimilarityThreshold.getRequired("minimum_similarity_threshold")
 
@@ -515,6 +520,7 @@ private constructor(
          * Unlike [minimumSimilarityThreshold], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("minimum_similarity_threshold")
         @ExcludeMissing
         fun _minimumSimilarityThreshold(): JsonField<Double> = minimumSimilarityThreshold
@@ -603,6 +609,7 @@ private constructor(
             }
 
             /** Minimum similarity threshold */
+            @Deprecated("deprecated")
             fun minimumSimilarityThreshold(minimumSimilarityThreshold: Double) =
                 minimumSimilarityThreshold(JsonField.of(minimumSimilarityThreshold))
 
@@ -613,6 +620,7 @@ private constructor(
              * [Double] value instead. This method is primarily for setting the field to an
              * undocumented or not yet supported value.
              */
+            @Deprecated("deprecated")
             fun minimumSimilarityThreshold(minimumSimilarityThreshold: JsonField<Double>) = apply {
                 this.minimumSimilarityThreshold = minimumSimilarityThreshold
             }
