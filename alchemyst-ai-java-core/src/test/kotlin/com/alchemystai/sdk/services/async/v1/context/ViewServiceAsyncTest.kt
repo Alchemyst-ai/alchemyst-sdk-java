@@ -4,6 +4,7 @@ package com.alchemystai.sdk.services.async.v1.context
 
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClientAsync
+import com.alchemystai.sdk.models.v1.context.view.ViewRetrieveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,7 +22,10 @@ internal class ViewServiceAsyncTest {
                 .build()
         val viewServiceAsync = client.v1().context().view()
 
-        val viewFuture = viewServiceAsync.retrieve()
+        val viewFuture =
+            viewServiceAsync.retrieve(
+                ViewRetrieveParams.builder().fileName("file_name").magicKey("magic_key").build()
+            )
 
         val view = viewFuture.get()
         view.validate()
