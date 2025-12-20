@@ -27,7 +27,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class ContextSearchParams
 private constructor(
-    private val queryMetadata: Metadata?,
+    private val metadata: Metadata?,
     private val mode: Mode?,
     private val body: Body,
     private val additionalHeaders: Headers,
@@ -40,7 +40,7 @@ private constructor(
      * - metadata=false (or omitted) → metadata will be excluded from the response for better
      *   performance.
      */
-    fun queryMetadata(): Optional<Metadata> = Optional.ofNullable(queryMetadata)
+    fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
 
     /**
      * Controls the search mode:
@@ -157,7 +157,7 @@ private constructor(
     /** A builder for [ContextSearchParams]. */
     class Builder internal constructor() {
 
-        private var queryMetadata: Metadata? = null
+        private var metadata: Metadata? = null
         private var mode: Mode? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -165,7 +165,7 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(contextSearchParams: ContextSearchParams) = apply {
-            queryMetadata = contextSearchParams.queryMetadata
+            metadata = contextSearchParams.metadata
             mode = contextSearchParams.mode
             body = contextSearchParams.body.toBuilder()
             additionalHeaders = contextSearchParams.additionalHeaders.toBuilder()
@@ -178,11 +178,10 @@ private constructor(
          * - metadata=false (or omitted) → metadata will be excluded from the response for better
          *   performance.
          */
-        fun queryMetadata(queryMetadata: Metadata?) = apply { this.queryMetadata = queryMetadata }
+        fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
 
-        /** Alias for calling [Builder.queryMetadata] with `queryMetadata.orElse(null)`. */
-        fun queryMetadata(queryMetadata: Optional<Metadata>) =
-            queryMetadata(queryMetadata.getOrNull())
+        /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /**
          * Controls the search mode:
@@ -410,7 +409,7 @@ private constructor(
          */
         fun build(): ContextSearchParams =
             ContextSearchParams(
-                queryMetadata,
+                metadata,
                 mode,
                 body.build(),
                 additionalHeaders.build(),
@@ -425,7 +424,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                queryMetadata?.let { put("metadata", it.toString()) }
+                metadata?.let { put("metadata", it.toString()) }
                 mode?.let { put("mode", it.toString()) }
                 putAll(additionalQueryParams)
             }
@@ -452,7 +451,9 @@ private constructor(
             @JsonProperty("similarity_threshold")
             @ExcludeMissing
             similarityThreshold: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("metadata") @ExcludeMissing bodyMetadata: JsonValue = JsonMissing.of(),
+            @JsonProperty("body_metadata")
+            @ExcludeMissing
+            bodyMetadata: JsonValue = JsonMissing.of(),
             @JsonProperty("scope") @ExcludeMissing scope: JsonField<Scope> = JsonMissing.of(),
             @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
         ) : this(
@@ -491,7 +492,7 @@ private constructor(
         fun similarityThreshold(): Double = similarityThreshold.getRequired("similarity_threshold")
 
         /** Additional metadata for the search */
-        @JsonProperty("metadata") @ExcludeMissing fun _bodyMetadata(): JsonValue = bodyMetadata
+        @JsonProperty("body_metadata") @ExcludeMissing fun _bodyMetadata(): JsonValue = bodyMetadata
 
         /**
          * Search scope
@@ -1186,7 +1187,7 @@ private constructor(
         }
 
         return other is ContextSearchParams &&
-            queryMetadata == other.queryMetadata &&
+            metadata == other.metadata &&
             mode == other.mode &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
@@ -1194,8 +1195,8 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(queryMetadata, mode, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(metadata, mode, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "ContextSearchParams{queryMetadata=$queryMetadata, mode=$mode, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ContextSearchParams{metadata=$metadata, mode=$mode, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
