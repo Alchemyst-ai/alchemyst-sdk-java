@@ -26,7 +26,7 @@ interface ViewServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ViewServiceAsync
 
-    /** Gets the context information for the authenticated user */
+    /** Gets the context information for the authenticated user. */
     fun retrieve(): CompletableFuture<ViewRetrieveResponse> = retrieve(ViewRetrieveParams.none())
 
     /** @see retrieve */
@@ -44,7 +44,7 @@ interface ViewServiceAsync {
     fun retrieve(requestOptions: RequestOptions): CompletableFuture<ViewRetrieveResponse> =
         retrieve(ViewRetrieveParams.none(), requestOptions)
 
-    /** Fetches documents view for authenticated user with optional organization context */
+    /** Fetches documents view for authenticated user with optional organization context. */
     fun docs(): CompletableFuture<ViewDocsResponse> = docs(ViewDocsParams.none())
 
     /** @see docs */

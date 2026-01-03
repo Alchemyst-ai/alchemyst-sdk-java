@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.alchemystai.sdk.models.v1.context
+package com.alchemystai.sdk.models.v1.context.memory
 
 import com.alchemystai.sdk.core.ExcludeMissing
 import com.alchemystai.sdk.core.JsonField
@@ -16,7 +16,7 @@ import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
-class ContextAddResponse
+class MemoryAddResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val contextId: JsonField<String>,
@@ -92,7 +92,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ContextAddResponse].
+         * Returns a mutable builder for constructing an instance of [MemoryAddResponse].
          *
          * The following fields are required:
          * ```java
@@ -103,7 +103,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ContextAddResponse]. */
+    /** A builder for [MemoryAddResponse]. */
     class Builder internal constructor() {
 
         private var contextId: JsonField<String>? = null
@@ -112,11 +112,11 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(contextAddResponse: ContextAddResponse) = apply {
-            contextId = contextAddResponse.contextId
-            success = contextAddResponse.success
-            processedDocuments = contextAddResponse.processedDocuments
-            additionalProperties = contextAddResponse.additionalProperties.toMutableMap()
+        internal fun from(memoryAddResponse: MemoryAddResponse) = apply {
+            contextId = memoryAddResponse.contextId
+            success = memoryAddResponse.success
+            processedDocuments = memoryAddResponse.processedDocuments
+            additionalProperties = memoryAddResponse.additionalProperties.toMutableMap()
         }
 
         fun contextId(contextId: String) = contextId(JsonField.of(contextId))
@@ -174,7 +174,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ContextAddResponse].
+         * Returns an immutable instance of [MemoryAddResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -186,8 +186,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ContextAddResponse =
-            ContextAddResponse(
+        fun build(): MemoryAddResponse =
+            MemoryAddResponse(
                 checkRequired("contextId", contextId),
                 checkRequired("success", success),
                 processedDocuments,
@@ -197,7 +197,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): ContextAddResponse = apply {
+    fun validate(): MemoryAddResponse = apply {
         if (validated) {
             return@apply
         }
@@ -232,7 +232,7 @@ private constructor(
             return true
         }
 
-        return other is ContextAddResponse &&
+        return other is MemoryAddResponse &&
             contextId == other.contextId &&
             success == other.success &&
             processedDocuments == other.processedDocuments &&
@@ -246,5 +246,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContextAddResponse{contextId=$contextId, success=$success, processedDocuments=$processedDocuments, additionalProperties=$additionalProperties}"
+        "MemoryAddResponse{contextId=$contextId, success=$success, processedDocuments=$processedDocuments, additionalProperties=$additionalProperties}"
 }

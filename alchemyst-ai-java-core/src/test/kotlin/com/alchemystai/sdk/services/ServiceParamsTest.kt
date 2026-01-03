@@ -50,6 +50,8 @@ internal class ServiceParamsTest {
                         .content("Customer asked about pricing for the Scale plan.")
                         .build()
                 )
+                .scope(ContextAddParams.Scope.INTERNAL)
+                .source("support-inbox")
                 .metadata(
                     ContextAddParams.Metadata.builder()
                         .fileName("support_thread_TCK-1234.txt")
@@ -60,8 +62,6 @@ internal class ServiceParamsTest {
                         .lastModified("2025-01-10T12:34:56.000Z")
                         .build()
                 )
-                .scope(ContextAddParams.Scope.INTERNAL)
-                .source("support-inbox")
                 .putAdditionalHeader("Secret-Header", "42")
                 .putAdditionalQueryParam("secret_query_param", "42")
                 .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))

@@ -26,7 +26,7 @@ interface ViewService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ViewService
 
-    /** Gets the context information for the authenticated user */
+    /** Gets the context information for the authenticated user. */
     fun retrieve(): ViewRetrieveResponse = retrieve(ViewRetrieveParams.none())
 
     /** @see retrieve */
@@ -43,7 +43,7 @@ interface ViewService {
     fun retrieve(requestOptions: RequestOptions): ViewRetrieveResponse =
         retrieve(ViewRetrieveParams.none(), requestOptions)
 
-    /** Fetches documents view for authenticated user with optional organization context */
+    /** Fetches documents view for authenticated user with optional organization context. */
     fun docs(): ViewDocsResponse = docs(ViewDocsParams.none())
 
     /** @see docs */

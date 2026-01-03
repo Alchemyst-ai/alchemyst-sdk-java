@@ -4,6 +4,7 @@ package com.alchemystai.sdk.services.blocking.v1.context
 
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClient
+import com.alchemystai.sdk.core.JsonValue
 import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
@@ -24,21 +25,40 @@ internal class MemoryServiceTest {
                 .build()
         val memoryService = client.v1().context().memory()
 
-        memoryService.update(
-            MemoryUpdateParams.builder()
-                .addContent(
-                    MemoryUpdateParams.Content.builder()
-                        .content("Customer asked about pricing for the Scale plan.")
-                        .build()
-                )
-                .addContent(
-                    MemoryUpdateParams.Content.builder()
-                        .content("Updated answer about the Scale plan pricing after discounts.")
-                        .build()
-                )
-                .memoryId("support-thread-TCK-1234")
-                .build()
-        )
+        val memory =
+            memoryService.update(
+                MemoryUpdateParams.builder()
+                    .addContent(
+                        MemoryUpdateParams.Content.builder()
+                            .id("msg-1")
+                            .content("Customer asked about pricing for the Scale plan.")
+                            .createdAt("2025-01-10T12:34:56.000Z")
+                            .metadata(
+                                MemoryUpdateParams.Content.Metadata.builder()
+                                    .putAdditionalProperty("messageId", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .role("user")
+                            .build()
+                    )
+                    .addContent(
+                        MemoryUpdateParams.Content.builder()
+                            .id("msg-2")
+                            .content("Updated answer about the Scale plan pricing after discounts.")
+                            .createdAt("2025-01-10T12:36:00.000Z")
+                            .metadata(
+                                MemoryUpdateParams.Content.Metadata.builder()
+                                    .putAdditionalProperty("messageId", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .role("assistant")
+                            .build()
+                    )
+                    .memoryId("support-thread-TCK-1234")
+                    .build()
+            )
+
+        memory.validate()
     }
 
     @Disabled("Prism tests are disabled")
@@ -54,7 +74,9 @@ internal class MemoryServiceTest {
         memoryService.delete(
             MemoryDeleteParams.builder()
                 .memoryId("support-thread-TCK-1234")
-                .organizationId("organization_id")
+                .organizationId("org_01HXYZABC")
+                .byDoc(true)
+                .byId(false)
                 .userId("user_id")
                 .build()
         )
@@ -70,22 +92,41 @@ internal class MemoryServiceTest {
                 .build()
         val memoryService = client.v1().context().memory()
 
-        memoryService.add(
-            MemoryAddParams.builder()
-                .addContent(
-                    MemoryAddParams.Content.builder()
-                        .content("Customer asked about pricing for the Scale plan.")
-                        .build()
-                )
-                .addContent(
-                    MemoryAddParams.Content.builder()
-                        .content(
-                            "Explained the Scale plan pricing and shared the pricing page link."
-                        )
-                        .build()
-                )
-                .memoryId("support-thread-TCK-1234")
-                .build()
-        )
+        val response =
+            memoryService.add(
+                MemoryAddParams.builder()
+                    .addContent(
+                        MemoryAddParams.Content.builder()
+                            .id("msg-1")
+                            .content("Customer asked about pricing for the Scale plan.")
+                            .createdAt("2025-01-10T12:34:56.000Z")
+                            .metadata(
+                                MemoryAddParams.Content.Metadata.builder()
+                                    .putAdditionalProperty("messageId", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .role("user")
+                            .build()
+                    )
+                    .addContent(
+                        MemoryAddParams.Content.builder()
+                            .id("msg-2")
+                            .content(
+                                "Explained the Scale plan pricing and shared the pricing page link."
+                            )
+                            .createdAt("2025-01-10T12:35:30.000Z")
+                            .metadata(
+                                MemoryAddParams.Content.Metadata.builder()
+                                    .putAdditionalProperty("messageId", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .role("assistant")
+                            .build()
+                    )
+                    .memoryId("support-thread-TCK-1234")
+                    .build()
+            )
+
+        response.validate()
     }
 }

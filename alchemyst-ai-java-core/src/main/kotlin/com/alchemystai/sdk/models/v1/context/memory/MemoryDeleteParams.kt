@@ -7,6 +7,7 @@ import com.alchemystai.sdk.core.JsonField
 import com.alchemystai.sdk.core.JsonMissing
 import com.alchemystai.sdk.core.JsonValue
 import com.alchemystai.sdk.core.Params
+import com.alchemystai.sdk.core.checkRequired
 import com.alchemystai.sdk.core.http.Headers
 import com.alchemystai.sdk.core.http.QueryParams
 import com.alchemystai.sdk.errors.AlchemystAiInvalidDataException
@@ -19,7 +20,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Deletes memory context data based on provided parameters */
+/** Deletes memory context data based on provided parameters. */
 class MemoryDeleteParams
 private constructor(
     private val body: Body,
@@ -30,18 +31,34 @@ private constructor(
     /**
      * The ID of the memory to delete
      *
-     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun memoryId(): Optional<String> = body.memoryId()
+    fun memoryId(): String = body.memoryId()
 
     /**
-     * Optional organization ID
+     * Organization ID
      *
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun organizationId(): Optional<String> = body.organizationId()
+
+    /**
+     * Delete by document flag
+     *
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun byDoc(): Optional<Boolean> = body.byDoc()
+
+    /**
+     * Delete by ID flag
+     *
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun byId(): Optional<Boolean> = body.byId()
 
     /**
      * Optional user ID
@@ -66,6 +83,20 @@ private constructor(
     fun _organizationId(): JsonField<String> = body._organizationId()
 
     /**
+     * Returns the raw JSON value of [byDoc].
+     *
+     * Unlike [byDoc], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _byDoc(): JsonField<Boolean> = body._byDoc()
+
+    /**
+     * Returns the raw JSON value of [byId].
+     *
+     * Unlike [byId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _byId(): JsonField<Boolean> = body._byId()
+
+    /**
      * Returns the raw JSON value of [userId].
      *
      * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
@@ -84,9 +115,15 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): MemoryDeleteParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [MemoryDeleteParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [MemoryDeleteParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .memoryId()
+         * .organizationId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -111,7 +148,10 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [memoryId]
          * - [organizationId]
+         * - [byDoc]
+         * - [byId]
          * - [userId]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -126,7 +166,7 @@ private constructor(
          */
         fun memoryId(memoryId: JsonField<String>) = apply { body.memoryId(memoryId) }
 
-        /** Optional organization ID */
+        /** Organization ID */
         fun organizationId(organizationId: String?) = apply { body.organizationId(organizationId) }
 
         /** Alias for calling [Builder.organizationId] with `organizationId.orElse(null)`. */
@@ -143,6 +183,48 @@ private constructor(
         fun organizationId(organizationId: JsonField<String>) = apply {
             body.organizationId(organizationId)
         }
+
+        /** Delete by document flag */
+        fun byDoc(byDoc: Boolean?) = apply { body.byDoc(byDoc) }
+
+        /**
+         * Alias for [Builder.byDoc].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun byDoc(byDoc: Boolean) = byDoc(byDoc as Boolean?)
+
+        /** Alias for calling [Builder.byDoc] with `byDoc.orElse(null)`. */
+        fun byDoc(byDoc: Optional<Boolean>) = byDoc(byDoc.getOrNull())
+
+        /**
+         * Sets [Builder.byDoc] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.byDoc] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun byDoc(byDoc: JsonField<Boolean>) = apply { body.byDoc(byDoc) }
+
+        /** Delete by ID flag */
+        fun byId(byId: Boolean?) = apply { body.byId(byId) }
+
+        /**
+         * Alias for [Builder.byId].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun byId(byId: Boolean) = byId(byId as Boolean?)
+
+        /** Alias for calling [Builder.byId] with `byId.orElse(null)`. */
+        fun byId(byId: Optional<Boolean>) = byId(byId.getOrNull())
+
+        /**
+         * Sets [Builder.byId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.byId] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun byId(byId: JsonField<Boolean>) = apply { body.byId(byId) }
 
         /** Optional user ID */
         @Deprecated("deprecated") fun userId(userId: String?) = apply { body.userId(userId) }
@@ -280,6 +362,14 @@ private constructor(
          * Returns an immutable instance of [MemoryDeleteParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .memoryId()
+         * .organizationId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): MemoryDeleteParams =
             MemoryDeleteParams(
@@ -300,6 +390,8 @@ private constructor(
     private constructor(
         private val memoryId: JsonField<String>,
         private val organizationId: JsonField<String>,
+        private val byDoc: JsonField<Boolean>,
+        private val byId: JsonField<Boolean>,
         private val userId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -312,24 +404,42 @@ private constructor(
             @JsonProperty("organization_id")
             @ExcludeMissing
             organizationId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("by_doc") @ExcludeMissing byDoc: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("by_id") @ExcludeMissing byId: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
-        ) : this(memoryId, organizationId, userId, mutableMapOf())
+        ) : this(memoryId, organizationId, byDoc, byId, userId, mutableMapOf())
 
         /**
          * The ID of the memory to delete
          *
-         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun memoryId(): Optional<String> = memoryId.getOptional("memoryId")
+        fun memoryId(): String = memoryId.getRequired("memoryId")
 
         /**
-         * Optional organization ID
+         * Organization ID
          *
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
         fun organizationId(): Optional<String> = organizationId.getOptional("organization_id")
+
+        /**
+         * Delete by document flag
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun byDoc(): Optional<Boolean> = byDoc.getOptional("by_doc")
+
+        /**
+         * Delete by ID flag
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun byId(): Optional<Boolean> = byId.getOptional("by_id")
 
         /**
          * Optional user ID
@@ -357,6 +467,20 @@ private constructor(
         fun _organizationId(): JsonField<String> = organizationId
 
         /**
+         * Returns the raw JSON value of [byDoc].
+         *
+         * Unlike [byDoc], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("by_doc") @ExcludeMissing fun _byDoc(): JsonField<Boolean> = byDoc
+
+        /**
+         * Returns the raw JSON value of [byId].
+         *
+         * Unlike [byId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("by_id") @ExcludeMissing fun _byId(): JsonField<Boolean> = byId
+
+        /**
          * Returns the raw JSON value of [userId].
          *
          * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
@@ -380,15 +504,25 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [Body]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .memoryId()
+             * .organizationId()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var memoryId: JsonField<String> = JsonMissing.of()
-            private var organizationId: JsonField<String> = JsonMissing.of()
+            private var memoryId: JsonField<String>? = null
+            private var organizationId: JsonField<String>? = null
+            private var byDoc: JsonField<Boolean> = JsonMissing.of()
+            private var byId: JsonField<Boolean> = JsonMissing.of()
             private var userId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -396,6 +530,8 @@ private constructor(
             internal fun from(body: Body) = apply {
                 memoryId = body.memoryId
                 organizationId = body.organizationId
+                byDoc = body.byDoc
+                byId = body.byId
                 userId = body.userId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -412,7 +548,7 @@ private constructor(
              */
             fun memoryId(memoryId: JsonField<String>) = apply { this.memoryId = memoryId }
 
-            /** Optional organization ID */
+            /** Organization ID */
             fun organizationId(organizationId: String?) =
                 organizationId(JsonField.ofNullable(organizationId))
 
@@ -430,6 +566,50 @@ private constructor(
             fun organizationId(organizationId: JsonField<String>) = apply {
                 this.organizationId = organizationId
             }
+
+            /** Delete by document flag */
+            fun byDoc(byDoc: Boolean?) = byDoc(JsonField.ofNullable(byDoc))
+
+            /**
+             * Alias for [Builder.byDoc].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun byDoc(byDoc: Boolean) = byDoc(byDoc as Boolean?)
+
+            /** Alias for calling [Builder.byDoc] with `byDoc.orElse(null)`. */
+            fun byDoc(byDoc: Optional<Boolean>) = byDoc(byDoc.getOrNull())
+
+            /**
+             * Sets [Builder.byDoc] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.byDoc] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun byDoc(byDoc: JsonField<Boolean>) = apply { this.byDoc = byDoc }
+
+            /** Delete by ID flag */
+            fun byId(byId: Boolean?) = byId(JsonField.ofNullable(byId))
+
+            /**
+             * Alias for [Builder.byId].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun byId(byId: Boolean) = byId(byId as Boolean?)
+
+            /** Alias for calling [Builder.byId] with `byId.orElse(null)`. */
+            fun byId(byId: Optional<Boolean>) = byId(byId.getOrNull())
+
+            /**
+             * Sets [Builder.byId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.byId] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun byId(byId: JsonField<Boolean>) = apply { this.byId = byId }
 
             /** Optional user ID */
             @Deprecated("deprecated")
@@ -472,9 +652,24 @@ private constructor(
              * Returns an immutable instance of [Body].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .memoryId()
+             * .organizationId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Body =
-                Body(memoryId, organizationId, userId, additionalProperties.toMutableMap())
+                Body(
+                    checkRequired("memoryId", memoryId),
+                    checkRequired("organizationId", organizationId),
+                    byDoc,
+                    byId,
+                    userId,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -486,6 +681,8 @@ private constructor(
 
             memoryId()
             organizationId()
+            byDoc()
+            byId()
             userId()
             validated = true
         }
@@ -508,6 +705,8 @@ private constructor(
         internal fun validity(): Int =
             (if (memoryId.asKnown().isPresent) 1 else 0) +
                 (if (organizationId.asKnown().isPresent) 1 else 0) +
+                (if (byDoc.asKnown().isPresent) 1 else 0) +
+                (if (byId.asKnown().isPresent) 1 else 0) +
                 (if (userId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -518,18 +717,20 @@ private constructor(
             return other is Body &&
                 memoryId == other.memoryId &&
                 organizationId == other.organizationId &&
+                byDoc == other.byDoc &&
+                byId == other.byId &&
                 userId == other.userId &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(memoryId, organizationId, userId, additionalProperties)
+            Objects.hash(memoryId, organizationId, byDoc, byId, userId, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{memoryId=$memoryId, organizationId=$organizationId, userId=$userId, additionalProperties=$additionalProperties}"
+            "Body{memoryId=$memoryId, organizationId=$organizationId, byDoc=$byDoc, byId=$byId, userId=$userId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -10,10 +10,10 @@ internal class ContextDeleteParamsTest {
     @Test
     fun create() {
         ContextDeleteParams.builder()
+            .organizationId("org_01HXYZABC")
+            .source("support-inbox")
             .byDoc(true)
             .byId(false)
-            .organizationId("organization_id")
-            .source("support-inbox")
             .userId("user_id")
             .build()
     }
@@ -22,26 +22,33 @@ internal class ContextDeleteParamsTest {
     fun body() {
         val params =
             ContextDeleteParams.builder()
+                .organizationId("org_01HXYZABC")
+                .source("support-inbox")
                 .byDoc(true)
                 .byId(false)
-                .organizationId("organization_id")
-                .source("support-inbox")
                 .userId("user_id")
                 .build()
 
         val body = params._body()
 
+        assertThat(body.organizationId()).isEqualTo("org_01HXYZABC")
+        assertThat(body.source()).isEqualTo("support-inbox")
         assertThat(body.byDoc()).contains(true)
         assertThat(body.byId()).contains(false)
-        assertThat(body.organizationId()).contains("organization_id")
-        assertThat(body.source()).contains("support-inbox")
         assertThat(body.userId()).contains("user_id")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ContextDeleteParams.builder().build()
+        val params =
+            ContextDeleteParams.builder()
+                .organizationId("org_01HXYZABC")
+                .source("support-inbox")
+                .build()
 
         val body = params._body()
+
+        assertThat(body.organizationId()).isEqualTo("org_01HXYZABC")
+        assertThat(body.source()).isEqualTo("support-inbox")
     }
 }

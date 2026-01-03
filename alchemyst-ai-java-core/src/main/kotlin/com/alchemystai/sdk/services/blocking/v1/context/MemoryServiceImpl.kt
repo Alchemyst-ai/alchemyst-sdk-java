@@ -7,16 +7,20 @@ import com.alchemystai.sdk.core.RequestOptions
 import com.alchemystai.sdk.core.handlers.emptyHandler
 import com.alchemystai.sdk.core.handlers.errorBodyHandler
 import com.alchemystai.sdk.core.handlers.errorHandler
+import com.alchemystai.sdk.core.handlers.jsonHandler
 import com.alchemystai.sdk.core.http.HttpMethod
 import com.alchemystai.sdk.core.http.HttpRequest
 import com.alchemystai.sdk.core.http.HttpResponse
 import com.alchemystai.sdk.core.http.HttpResponse.Handler
+import com.alchemystai.sdk.core.http.HttpResponseFor
 import com.alchemystai.sdk.core.http.json
 import com.alchemystai.sdk.core.http.parseable
 import com.alchemystai.sdk.core.prepare
 import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateResponse
 import java.util.function.Consumer
 
 class MemoryServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,20 +35,21 @@ class MemoryServiceImpl internal constructor(private val clientOptions: ClientOp
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MemoryService =
         MemoryServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun update(params: MemoryUpdateParams, requestOptions: RequestOptions) {
+    override fun update(
+        params: MemoryUpdateParams,
+        requestOptions: RequestOptions,
+    ): MemoryUpdateResponse =
         // post /api/v1/context/memory/update
-        withRawResponse().update(params, requestOptions)
-    }
+        withRawResponse().update(params, requestOptions).parse()
 
     override fun delete(params: MemoryDeleteParams, requestOptions: RequestOptions) {
         // post /api/v1/context/memory/delete
         withRawResponse().delete(params, requestOptions)
     }
 
-    override fun add(params: MemoryAddParams, requestOptions: RequestOptions) {
+    override fun add(params: MemoryAddParams, requestOptions: RequestOptions): MemoryAddResponse =
         // post /api/v1/context/memory/add
-        withRawResponse().add(params, requestOptions)
-    }
+        withRawResponse().add(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MemoryService.WithRawResponse {
@@ -59,12 +64,13 @@ class MemoryServiceImpl internal constructor(private val clientOptions: ClientOp
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val updateHandler: Handler<Void?> = emptyHandler()
+        private val updateHandler: Handler<MemoryUpdateResponse> =
+            jsonHandler<MemoryUpdateResponse>(clientOptions.jsonMapper)
 
         override fun update(
             params: MemoryUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponse {
+        ): HttpResponseFor<MemoryUpdateResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -76,7 +82,13 @@ class MemoryServiceImpl internal constructor(private val clientOptions: ClientOp
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { updateHandler.handle(it) }
+                response
+                    .use { updateHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 
@@ -101,9 +113,13 @@ class MemoryServiceImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val addHandler: Handler<Void?> = emptyHandler()
+        private val addHandler: Handler<MemoryAddResponse> =
+            jsonHandler<MemoryAddResponse>(clientOptions.jsonMapper)
 
-        override fun add(params: MemoryAddParams, requestOptions: RequestOptions): HttpResponse {
+        override fun add(
+            params: MemoryAddParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MemoryAddResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -115,7 +131,13 @@ class MemoryServiceImpl internal constructor(private val clientOptions: ClientOp
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { addHandler.handle(it) }
+                response
+                    .use { addHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
     }

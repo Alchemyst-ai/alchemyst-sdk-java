@@ -4,6 +4,7 @@ package com.alchemystai.sdk.services.async.v1.context
 
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClientAsync
+import com.alchemystai.sdk.models.v1.context.view.ViewDocsParams
 import com.alchemystai.sdk.models.v1.context.view.ViewRetrieveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -41,7 +42,8 @@ internal class ViewServiceAsyncTest {
                 .build()
         val viewServiceAsync = client.v1().context().view()
 
-        val responseFuture = viewServiceAsync.docs()
+        val responseFuture =
+            viewServiceAsync.docs(ViewDocsParams.builder().magicKey("magic_key").build())
 
         val response = responseFuture.get()
         response.validate()

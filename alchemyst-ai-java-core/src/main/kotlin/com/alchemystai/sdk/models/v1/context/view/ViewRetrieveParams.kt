@@ -9,7 +9,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Gets the context information for the authenticated user */
+/** Gets the context information for the authenticated user. */
 class ViewRetrieveParams
 private constructor(
     private val fileName: String?,

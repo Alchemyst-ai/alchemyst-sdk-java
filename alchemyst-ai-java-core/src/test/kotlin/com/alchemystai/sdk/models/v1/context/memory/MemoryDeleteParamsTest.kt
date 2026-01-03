@@ -11,7 +11,9 @@ internal class MemoryDeleteParamsTest {
     fun create() {
         MemoryDeleteParams.builder()
             .memoryId("support-thread-TCK-1234")
-            .organizationId("organization_id")
+            .organizationId("org_01HXYZABC")
+            .byDoc(true)
+            .byId(false)
             .userId("user_id")
             .build()
     }
@@ -21,21 +23,32 @@ internal class MemoryDeleteParamsTest {
         val params =
             MemoryDeleteParams.builder()
                 .memoryId("support-thread-TCK-1234")
-                .organizationId("organization_id")
+                .organizationId("org_01HXYZABC")
+                .byDoc(true)
+                .byId(false)
                 .userId("user_id")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.memoryId()).contains("support-thread-TCK-1234")
-        assertThat(body.organizationId()).contains("organization_id")
+        assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.organizationId()).contains("org_01HXYZABC")
+        assertThat(body.byDoc()).contains(true)
+        assertThat(body.byId()).contains(false)
         assertThat(body.userId()).contains("user_id")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = MemoryDeleteParams.builder().build()
+        val params =
+            MemoryDeleteParams.builder()
+                .memoryId("support-thread-TCK-1234")
+                .organizationId("org_01HXYZABC")
+                .build()
 
         val body = params._body()
+
+        assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.organizationId()).contains("org_01HXYZABC")
     }
 }

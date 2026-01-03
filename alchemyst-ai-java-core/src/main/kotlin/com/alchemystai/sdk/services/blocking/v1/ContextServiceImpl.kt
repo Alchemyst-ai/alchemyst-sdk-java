@@ -19,8 +19,6 @@ import com.alchemystai.sdk.models.v1.context.ContextAddParams
 import com.alchemystai.sdk.models.v1.context.ContextAddResponse
 import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteResponse
-import com.alchemystai.sdk.models.v1.context.ContextSearchParams
-import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
 import com.alchemystai.sdk.services.blocking.v1.context.MemoryService
 import com.alchemystai.sdk.services.blocking.v1.context.MemoryServiceImpl
 import com.alchemystai.sdk.services.blocking.v1.context.TraceService
@@ -63,13 +61,6 @@ class ContextServiceImpl internal constructor(private val clientOptions: ClientO
     override fun add(params: ContextAddParams, requestOptions: RequestOptions): ContextAddResponse =
         // post /api/v1/context/add
         withRawResponse().add(params, requestOptions).parse()
-
-    override fun search(
-        params: ContextSearchParams,
-        requestOptions: RequestOptions,
-    ): ContextSearchResponse =
-        // post /api/v1/context/search
-        withRawResponse().search(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ContextService.WithRawResponse {
@@ -150,34 +141,6 @@ class ContextServiceImpl internal constructor(private val clientOptions: ClientO
             return errorHandler.handle(response).parseable {
                 response
                     .use { addHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
-        }
-
-        private val searchHandler: Handler<ContextSearchResponse> =
-            jsonHandler<ContextSearchResponse>(clientOptions.jsonMapper)
-
-        override fun search(
-            params: ContextSearchParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ContextSearchResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("api", "v1", "context", "search")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { searchHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
