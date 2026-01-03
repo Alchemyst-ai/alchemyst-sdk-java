@@ -19,6 +19,8 @@ import com.alchemystai.sdk.models.v1.context.ContextAddParams
 import com.alchemystai.sdk.models.v1.context.ContextAddResponse
 import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteResponse
+import com.alchemystai.sdk.models.v1.context.ContextSearchParams
+import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
 import com.alchemystai.sdk.services.async.v1.context.MemoryServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.MemoryServiceAsyncImpl
 import com.alchemystai.sdk.services.async.v1.context.TraceServiceAsync
@@ -65,6 +67,13 @@ class ContextServiceAsyncImpl internal constructor(private val clientOptions: Cl
     ): CompletableFuture<ContextAddResponse> =
         // post /api/v1/context/add
         withRawResponse().add(params, requestOptions).thenApply { it.parse() }
+
+    override fun search(
+        params: ContextSearchParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<ContextSearchResponse> =
+        // post /api/v1/context/search
+        withRawResponse().search(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ContextServiceAsync.WithRawResponse {
@@ -150,6 +159,37 @@ class ContextServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     errorHandler.handle(response).parseable {
                         response
                             .use { addHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val searchHandler: Handler<ContextSearchResponse> =
+            jsonHandler<ContextSearchResponse>(clientOptions.jsonMapper)
+
+        override fun search(
+            params: ContextSearchParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<ContextSearchResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("api", "v1", "context", "search")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { searchHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

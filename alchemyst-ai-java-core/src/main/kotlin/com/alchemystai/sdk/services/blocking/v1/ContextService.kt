@@ -9,6 +9,8 @@ import com.alchemystai.sdk.models.v1.context.ContextAddParams
 import com.alchemystai.sdk.models.v1.context.ContextAddResponse
 import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteResponse
+import com.alchemystai.sdk.models.v1.context.ContextSearchParams
+import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
 import com.alchemystai.sdk.services.blocking.v1.context.MemoryService
 import com.alchemystai.sdk.services.blocking.v1.context.TraceService
 import com.alchemystai.sdk.services.blocking.v1.context.ViewService
@@ -60,6 +62,19 @@ interface ContextService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ContextAddResponse
 
+    /**
+     * This endpoint sends a search request to the context processor to retrieve relevant context
+     * data based on the provided query.
+     */
+    fun search(params: ContextSearchParams): ContextSearchResponse =
+        search(params, RequestOptions.none())
+
+    /** @see search */
+    fun search(
+        params: ContextSearchParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContextSearchResponse
+
     /** A view of [ContextService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -105,5 +120,20 @@ interface ContextService {
             params: ContextAddParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ContextAddResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /api/v1/context/search`, but is otherwise the same
+         * as [ContextService.search].
+         */
+        @MustBeClosed
+        fun search(params: ContextSearchParams): HttpResponseFor<ContextSearchResponse> =
+            search(params, RequestOptions.none())
+
+        /** @see search */
+        @MustBeClosed
+        fun search(
+            params: ContextSearchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContextSearchResponse>
     }
 }

@@ -9,6 +9,8 @@ import com.alchemystai.sdk.models.v1.context.ContextAddParams
 import com.alchemystai.sdk.models.v1.context.ContextAddResponse
 import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteResponse
+import com.alchemystai.sdk.models.v1.context.ContextSearchParams
+import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
 import com.alchemystai.sdk.services.async.v1.context.MemoryServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.TraceServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.ViewServiceAsync
@@ -62,6 +64,19 @@ interface ContextServiceAsync {
     ): CompletableFuture<ContextAddResponse>
 
     /**
+     * This endpoint sends a search request to the context processor to retrieve relevant context
+     * data based on the provided query.
+     */
+    fun search(params: ContextSearchParams): CompletableFuture<ContextSearchResponse> =
+        search(params, RequestOptions.none())
+
+    /** @see search */
+    fun search(
+        params: ContextSearchParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<ContextSearchResponse>
+
+    /**
      * A view of [ContextServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
@@ -108,5 +123,20 @@ interface ContextServiceAsync {
             params: ContextAddParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ContextAddResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /api/v1/context/search`, but is otherwise the same
+         * as [ContextServiceAsync.search].
+         */
+        fun search(
+            params: ContextSearchParams
+        ): CompletableFuture<HttpResponseFor<ContextSearchResponse>> =
+            search(params, RequestOptions.none())
+
+        /** @see search */
+        fun search(
+            params: ContextSearchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContextSearchResponse>>
     }
 }
