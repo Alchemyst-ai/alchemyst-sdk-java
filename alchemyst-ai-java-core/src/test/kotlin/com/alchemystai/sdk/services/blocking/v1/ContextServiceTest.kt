@@ -4,8 +4,10 @@ package com.alchemystai.sdk.services.blocking.v1
 
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClient
+import com.alchemystai.sdk.core.JsonValue
 import com.alchemystai.sdk.models.v1.context.ContextAddParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
+import com.alchemystai.sdk.models.v1.context.ContextSearchParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -68,6 +70,33 @@ internal class ContextServiceTest {
                             .lastModified("2025-01-10T12:34:56.000Z")
                             .build()
                     )
+                    .build()
+            )
+
+        response.validate()
+    }
+
+    @Disabled("Prism tests are disabled")
+    @Test
+    fun search() {
+        val client =
+            AlchemystAiOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val contextService = client.v1().context()
+
+        val response =
+            contextService.search(
+                ContextSearchParams.builder()
+                    .metadata(JsonValue.from(null))
+                    .mode(ContextSearchParams.Mode.FAST)
+                    .minimumSimilarityThreshold(0.5)
+                    .query("What did the customer ask about pricing for the Scale plan?")
+                    .similarityThreshold(0.8)
+                    .bodyMetadata(JsonValue.from(mapOf<String, Any>()))
+                    .scope(ContextSearchParams.Scope.INTERNAL)
+                    .userId("user123")
                     .build()
             )
 
