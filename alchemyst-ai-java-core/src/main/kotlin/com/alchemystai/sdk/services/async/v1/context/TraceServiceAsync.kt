@@ -26,7 +26,7 @@ interface TraceServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TraceServiceAsync
 
-    /** Retrieves a list of traces for the authenticated user */
+    /** Returns paginated traces for the authenticated user within their organization. */
     fun list(): CompletableFuture<TraceListResponse> = list(TraceListParams.none())
 
     /** @see list */
@@ -44,7 +44,7 @@ interface TraceServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<TraceListResponse> =
         list(TraceListParams.none(), requestOptions)
 
-    /** Deletes a data trace for the authenticated user with the specified trace ID */
+    /** Deletes a data trace for the authenticated user with the specified trace ID. */
     fun delete(traceId: String): CompletableFuture<TraceDeleteResponse> =
         delete(traceId, TraceDeleteParams.none())
 

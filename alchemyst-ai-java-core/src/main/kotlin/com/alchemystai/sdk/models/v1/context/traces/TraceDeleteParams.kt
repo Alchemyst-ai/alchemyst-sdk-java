@@ -11,7 +11,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Deletes a data trace for the authenticated user with the specified trace ID */
+/** Deletes a data trace for the authenticated user with the specified trace ID. */
 class TraceDeleteParams
 private constructor(
     private val traceId: String?,

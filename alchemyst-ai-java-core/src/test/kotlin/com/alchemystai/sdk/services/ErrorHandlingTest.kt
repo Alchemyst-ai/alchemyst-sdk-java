@@ -78,6 +78,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -88,8 +90,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -119,6 +119,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -129,8 +131,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -160,6 +160,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -170,8 +172,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -201,6 +201,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -211,8 +213,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -242,6 +242,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -252,8 +254,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -283,6 +283,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -293,8 +295,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -324,6 +324,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -334,8 +336,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -365,6 +365,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -375,8 +377,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -406,6 +406,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -416,8 +418,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -447,6 +447,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -457,8 +459,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -488,6 +488,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -498,8 +500,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -529,6 +529,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -539,8 +541,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -570,6 +570,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -580,8 +582,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -611,6 +611,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -621,8 +623,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -652,6 +652,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -662,8 +664,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -693,6 +693,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -703,8 +705,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }
@@ -732,6 +732,8 @@ internal class ErrorHandlingTest {
                                 .content("Customer asked about pricing for the Scale plan.")
                                 .build()
                         )
+                        .scope(ContextAddParams.Scope.INTERNAL)
+                        .source("support-inbox")
                         .metadata(
                             ContextAddParams.Metadata.builder()
                                 .fileName("support_thread_TCK-1234.txt")
@@ -742,8 +744,6 @@ internal class ErrorHandlingTest {
                                 .lastModified("2025-01-10T12:34:56.000Z")
                                 .build()
                         )
-                        .scope(ContextAddParams.Scope.INTERNAL)
-                        .source("support-inbox")
                         .build()
                 )
             }

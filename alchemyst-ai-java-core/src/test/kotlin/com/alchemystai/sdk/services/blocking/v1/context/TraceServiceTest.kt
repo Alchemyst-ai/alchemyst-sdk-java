@@ -4,6 +4,7 @@ package com.alchemystai.sdk.services.blocking.v1.context
 
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClient
+import com.alchemystai.sdk.models.v1.context.traces.TraceListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,7 +22,7 @@ internal class TraceServiceTest {
                 .build()
         val traceService = client.v1().context().traces()
 
-        val traces = traceService.list()
+        val traces = traceService.list(TraceListParams.builder().limit(0L).page(0L).build())
 
         traces.validate()
     }

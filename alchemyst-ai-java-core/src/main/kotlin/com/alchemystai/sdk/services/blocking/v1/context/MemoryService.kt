@@ -5,9 +5,12 @@ package com.alchemystai.sdk.services.blocking.v1.context
 import com.alchemystai.sdk.core.ClientOptions
 import com.alchemystai.sdk.core.RequestOptions
 import com.alchemystai.sdk.core.http.HttpResponse
+import com.alchemystai.sdk.core.http.HttpResponseFor
 import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -26,51 +29,29 @@ interface MemoryService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): MemoryService
 
     /** This endpoint updates memory context data. */
-    fun update() = update(MemoryUpdateParams.none())
-
-    /** @see update */
-    fun update(
-        params: MemoryUpdateParams = MemoryUpdateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    )
-
-    /** @see update */
-    fun update(params: MemoryUpdateParams = MemoryUpdateParams.none()) =
+    fun update(params: MemoryUpdateParams): MemoryUpdateResponse =
         update(params, RequestOptions.none())
 
     /** @see update */
-    fun update(requestOptions: RequestOptions) = update(MemoryUpdateParams.none(), requestOptions)
-
-    /** Deletes memory context data based on provided parameters */
-    fun delete() = delete(MemoryDeleteParams.none())
-
-    /** @see delete */
-    fun delete(
-        params: MemoryDeleteParams = MemoryDeleteParams.none(),
+    fun update(
+        params: MemoryUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): MemoryUpdateResponse
+
+    /** Deletes memory context data based on provided parameters. */
+    fun delete(params: MemoryDeleteParams) = delete(params, RequestOptions.none())
 
     /** @see delete */
-    fun delete(params: MemoryDeleteParams = MemoryDeleteParams.none()) =
-        delete(params, RequestOptions.none())
-
-    /** @see delete */
-    fun delete(requestOptions: RequestOptions) = delete(MemoryDeleteParams.none(), requestOptions)
+    fun delete(params: MemoryDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** This endpoint adds memory context data, fetching chat history if needed. */
-    fun add() = add(MemoryAddParams.none())
+    fun add(params: MemoryAddParams): MemoryAddResponse = add(params, RequestOptions.none())
 
     /** @see add */
     fun add(
-        params: MemoryAddParams = MemoryAddParams.none(),
+        params: MemoryAddParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
-
-    /** @see add */
-    fun add(params: MemoryAddParams = MemoryAddParams.none()) = add(params, RequestOptions.none())
-
-    /** @see add */
-    fun add(requestOptions: RequestOptions) = add(MemoryAddParams.none(), requestOptions)
+    ): MemoryAddResponse
 
     /** A view of [MemoryService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -86,69 +67,44 @@ interface MemoryService {
          * Returns a raw HTTP response for `post /api/v1/context/memory/update`, but is otherwise
          * the same as [MemoryService.update].
          */
-        @MustBeClosed fun update(): HttpResponse = update(MemoryUpdateParams.none())
-
-        /** @see update */
         @MustBeClosed
-        fun update(
-            params: MemoryUpdateParams = MemoryUpdateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
-
-        /** @see update */
-        @MustBeClosed
-        fun update(params: MemoryUpdateParams = MemoryUpdateParams.none()): HttpResponse =
+        fun update(params: MemoryUpdateParams): HttpResponseFor<MemoryUpdateResponse> =
             update(params, RequestOptions.none())
 
         /** @see update */
         @MustBeClosed
-        fun update(requestOptions: RequestOptions): HttpResponse =
-            update(MemoryUpdateParams.none(), requestOptions)
+        fun update(
+            params: MemoryUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MemoryUpdateResponse>
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/memory/delete`, but is otherwise
          * the same as [MemoryService.delete].
          */
-        @MustBeClosed fun delete(): HttpResponse = delete(MemoryDeleteParams.none())
+        @MustBeClosed
+        fun delete(params: MemoryDeleteParams): HttpResponse = delete(params, RequestOptions.none())
 
         /** @see delete */
         @MustBeClosed
         fun delete(
-            params: MemoryDeleteParams = MemoryDeleteParams.none(),
+            params: MemoryDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /** @see delete */
-        @MustBeClosed
-        fun delete(params: MemoryDeleteParams = MemoryDeleteParams.none()): HttpResponse =
-            delete(params, RequestOptions.none())
-
-        /** @see delete */
-        @MustBeClosed
-        fun delete(requestOptions: RequestOptions): HttpResponse =
-            delete(MemoryDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/memory/add`, but is otherwise the
          * same as [MemoryService.add].
          */
-        @MustBeClosed fun add(): HttpResponse = add(MemoryAddParams.none())
-
-        /** @see add */
         @MustBeClosed
-        fun add(
-            params: MemoryAddParams = MemoryAddParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
-
-        /** @see add */
-        @MustBeClosed
-        fun add(params: MemoryAddParams = MemoryAddParams.none()): HttpResponse =
+        fun add(params: MemoryAddParams): HttpResponseFor<MemoryAddResponse> =
             add(params, RequestOptions.none())
 
         /** @see add */
         @MustBeClosed
-        fun add(requestOptions: RequestOptions): HttpResponse =
-            add(MemoryAddParams.none(), requestOptions)
+        fun add(
+            params: MemoryAddParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MemoryAddResponse>
     }
 }

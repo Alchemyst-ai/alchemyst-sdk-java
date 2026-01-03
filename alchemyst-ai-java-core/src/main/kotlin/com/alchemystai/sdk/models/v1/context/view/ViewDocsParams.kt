@@ -6,13 +6,19 @@ import com.alchemystai.sdk.core.Params
 import com.alchemystai.sdk.core.http.Headers
 import com.alchemystai.sdk.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-/** Fetches documents view for authenticated user with optional organization context */
+/** Fetches documents view for authenticated user with optional organization context. */
 class ViewDocsParams
 private constructor(
+    private val magicKey: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /** Optional magic key for special access or filtering */
+    fun magicKey(): Optional<String> = Optional.ofNullable(magicKey)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -33,14 +39,22 @@ private constructor(
     /** A builder for [ViewDocsParams]. */
     class Builder internal constructor() {
 
+        private var magicKey: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(viewDocsParams: ViewDocsParams) = apply {
+            magicKey = viewDocsParams.magicKey
             additionalHeaders = viewDocsParams.additionalHeaders.toBuilder()
             additionalQueryParams = viewDocsParams.additionalQueryParams.toBuilder()
         }
+
+        /** Optional magic key for special access or filtering */
+        fun magicKey(magicKey: String?) = apply { this.magicKey = magicKey }
+
+        /** Alias for calling [Builder.magicKey] with `magicKey.orElse(null)`. */
+        fun magicKey(magicKey: Optional<String>) = magicKey(magicKey.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -146,12 +160,18 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): ViewDocsParams =
-            ViewDocsParams(additionalHeaders.build(), additionalQueryParams.build())
+            ViewDocsParams(magicKey, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                magicKey?.let { put("magic_key", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -159,12 +179,13 @@ private constructor(
         }
 
         return other is ViewDocsParams &&
+            magicKey == other.magicKey &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(magicKey, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "ViewDocsParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ViewDocsParams{magicKey=$magicKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

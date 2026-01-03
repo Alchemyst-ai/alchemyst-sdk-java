@@ -4,6 +4,7 @@ package com.alchemystai.sdk.services.blocking.v1.context
 
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClient
+import com.alchemystai.sdk.models.v1.context.view.ViewDocsParams
 import com.alchemystai.sdk.models.v1.context.view.ViewRetrieveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -40,7 +41,7 @@ internal class ViewServiceTest {
                 .build()
         val viewService = client.v1().context().view()
 
-        val response = viewService.docs()
+        val response = viewService.docs(ViewDocsParams.builder().magicKey("magic_key").build())
 
         response.validate()
     }

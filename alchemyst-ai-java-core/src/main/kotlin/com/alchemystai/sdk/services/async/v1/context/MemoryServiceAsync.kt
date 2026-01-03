@@ -5,9 +5,12 @@ package com.alchemystai.sdk.services.async.v1.context
 import com.alchemystai.sdk.core.ClientOptions
 import com.alchemystai.sdk.core.RequestOptions
 import com.alchemystai.sdk.core.http.HttpResponse
+import com.alchemystai.sdk.core.http.HttpResponseFor
 import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -26,55 +29,34 @@ interface MemoryServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): MemoryServiceAsync
 
     /** This endpoint updates memory context data. */
-    fun update(): CompletableFuture<Void?> = update(MemoryUpdateParams.none())
-
-    /** @see update */
-    fun update(
-        params: MemoryUpdateParams = MemoryUpdateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Void?>
-
-    /** @see update */
-    fun update(params: MemoryUpdateParams = MemoryUpdateParams.none()): CompletableFuture<Void?> =
+    fun update(params: MemoryUpdateParams): CompletableFuture<MemoryUpdateResponse> =
         update(params, RequestOptions.none())
 
     /** @see update */
-    fun update(requestOptions: RequestOptions): CompletableFuture<Void?> =
-        update(MemoryUpdateParams.none(), requestOptions)
-
-    /** Deletes memory context data based on provided parameters */
-    fun delete(): CompletableFuture<Void?> = delete(MemoryDeleteParams.none())
-
-    /** @see delete */
-    fun delete(
-        params: MemoryDeleteParams = MemoryDeleteParams.none(),
+    fun update(
+        params: MemoryUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Void?>
+    ): CompletableFuture<MemoryUpdateResponse>
 
-    /** @see delete */
-    fun delete(params: MemoryDeleteParams = MemoryDeleteParams.none()): CompletableFuture<Void?> =
+    /** Deletes memory context data based on provided parameters. */
+    fun delete(params: MemoryDeleteParams): CompletableFuture<Void?> =
         delete(params, RequestOptions.none())
 
     /** @see delete */
-    fun delete(requestOptions: RequestOptions): CompletableFuture<Void?> =
-        delete(MemoryDeleteParams.none(), requestOptions)
-
-    /** This endpoint adds memory context data, fetching chat history if needed. */
-    fun add(): CompletableFuture<Void?> = add(MemoryAddParams.none())
-
-    /** @see add */
-    fun add(
-        params: MemoryAddParams = MemoryAddParams.none(),
+    fun delete(
+        params: MemoryDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** @see add */
-    fun add(params: MemoryAddParams = MemoryAddParams.none()): CompletableFuture<Void?> =
+    /** This endpoint adds memory context data, fetching chat history if needed. */
+    fun add(params: MemoryAddParams): CompletableFuture<MemoryAddResponse> =
         add(params, RequestOptions.none())
 
     /** @see add */
-    fun add(requestOptions: RequestOptions): CompletableFuture<Void?> =
-        add(MemoryAddParams.none(), requestOptions)
+    fun add(
+        params: MemoryAddParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<MemoryAddResponse>
 
     /**
      * A view of [MemoryServiceAsync] that provides access to raw HTTP responses for each method.
@@ -94,62 +76,41 @@ interface MemoryServiceAsync {
          * Returns a raw HTTP response for `post /api/v1/context/memory/update`, but is otherwise
          * the same as [MemoryServiceAsync.update].
          */
-        fun update(): CompletableFuture<HttpResponse> = update(MemoryUpdateParams.none())
+        fun update(
+            params: MemoryUpdateParams
+        ): CompletableFuture<HttpResponseFor<MemoryUpdateResponse>> =
+            update(params, RequestOptions.none())
 
         /** @see update */
         fun update(
-            params: MemoryUpdateParams = MemoryUpdateParams.none(),
+            params: MemoryUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponse>
-
-        /** @see update */
-        fun update(
-            params: MemoryUpdateParams = MemoryUpdateParams.none()
-        ): CompletableFuture<HttpResponse> = update(params, RequestOptions.none())
-
-        /** @see update */
-        fun update(requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
-            update(MemoryUpdateParams.none(), requestOptions)
+        ): CompletableFuture<HttpResponseFor<MemoryUpdateResponse>>
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/memory/delete`, but is otherwise
          * the same as [MemoryServiceAsync.delete].
          */
-        fun delete(): CompletableFuture<HttpResponse> = delete(MemoryDeleteParams.none())
+        fun delete(params: MemoryDeleteParams): CompletableFuture<HttpResponse> =
+            delete(params, RequestOptions.none())
 
         /** @see delete */
         fun delete(
-            params: MemoryDeleteParams = MemoryDeleteParams.none(),
+            params: MemoryDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse>
-
-        /** @see delete */
-        fun delete(
-            params: MemoryDeleteParams = MemoryDeleteParams.none()
-        ): CompletableFuture<HttpResponse> = delete(params, RequestOptions.none())
-
-        /** @see delete */
-        fun delete(requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
-            delete(MemoryDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/memory/add`, but is otherwise the
          * same as [MemoryServiceAsync.add].
          */
-        fun add(): CompletableFuture<HttpResponse> = add(MemoryAddParams.none())
-
-        /** @see add */
-        fun add(
-            params: MemoryAddParams = MemoryAddParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponse>
-
-        /** @see add */
-        fun add(params: MemoryAddParams = MemoryAddParams.none()): CompletableFuture<HttpResponse> =
+        fun add(params: MemoryAddParams): CompletableFuture<HttpResponseFor<MemoryAddResponse>> =
             add(params, RequestOptions.none())
 
         /** @see add */
-        fun add(requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
-            add(MemoryAddParams.none(), requestOptions)
+        fun add(
+            params: MemoryAddParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<MemoryAddResponse>>
     }
 }
