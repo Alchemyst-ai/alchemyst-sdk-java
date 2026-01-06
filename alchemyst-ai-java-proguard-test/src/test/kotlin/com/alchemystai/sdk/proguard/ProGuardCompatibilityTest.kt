@@ -57,9 +57,9 @@ internal class ProGuardCompatibilityTest {
         val jsonMapper = jsonMapper()
         val contextAddResponse =
             ContextAddResponse.builder()
-                .contextId("ctx_01HXYZABC")
+                .contextId("01HXYZABC")
                 .success(true)
-                .processedDocuments(2.0)
+                .processedDocuments(1.0)
                 .build()
 
         val roundtrippedContextAddResponse =

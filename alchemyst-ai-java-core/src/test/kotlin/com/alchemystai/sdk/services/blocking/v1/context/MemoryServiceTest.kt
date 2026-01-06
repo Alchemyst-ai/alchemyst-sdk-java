@@ -5,7 +5,6 @@ package com.alchemystai.sdk.services.blocking.v1.context
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClient
 import com.alchemystai.sdk.core.JsonValue
-import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
 import org.junit.jupiter.api.Disabled
@@ -80,53 +79,5 @@ internal class MemoryServiceTest {
                 .userId("user_id")
                 .build()
         )
-    }
-
-    @Disabled("Prism tests are disabled")
-    @Test
-    fun add() {
-        val client =
-            AlchemystAiOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val memoryService = client.v1().context().memory()
-
-        val response =
-            memoryService.add(
-                MemoryAddParams.builder()
-                    .addContent(
-                        MemoryAddParams.Content.builder()
-                            .content("Customer asked about pricing for the Scale plan.")
-                            .metadata(
-                                MemoryAddParams.Content.Metadata.builder()
-                                    .messageId("msg-1")
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .addContent(
-                        MemoryAddParams.Content.builder()
-                            .content(
-                                "Explained the Scale plan pricing and shared the pricing page link."
-                            )
-                            .metadata(
-                                MemoryAddParams.Content.Metadata.builder()
-                                    .messageId("msg-2")
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .memoryId("support-thread-TCK-1234")
-                    .metadata(
-                        MemoryAddParams.Metadata.builder()
-                            .addGroupName("support")
-                            .addGroupName("pricing")
-                            .build()
-                    )
-                    .build()
-            )
-
-        response.validate()
     }
 }
