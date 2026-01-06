@@ -31,7 +31,7 @@ private constructor(
 ) : Params {
 
     /**
-     * Array of content objects with metadata
+     * Array of content objects with additional properties allowed
      *
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -47,14 +47,6 @@ private constructor(
     fun memoryId(): String = body.memoryId()
 
     /**
-     * Optional metadata with groupName defaulting to ["default"]
-     *
-     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun metadata(): Optional<Metadata> = body.metadata()
-
-    /**
      * Returns the raw JSON value of [contents].
      *
      * Unlike [contents], this method doesn't throw if the JSON field has an unexpected type.
@@ -67,13 +59,6 @@ private constructor(
      * Unlike [memoryId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _memoryId(): JsonField<String> = body._memoryId()
-
-    /**
-     * Returns the raw JSON value of [metadata].
-     *
-     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _metadata(): JsonField<Metadata> = body._metadata()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -120,11 +105,10 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [contents]
          * - [memoryId]
-         * - [metadata]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** Array of content objects with metadata */
+        /** Array of content objects with additional properties allowed */
         fun contents(contents: List<Content>) = apply { body.contents(contents) }
 
         /**
@@ -153,18 +137,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun memoryId(memoryId: JsonField<String>) = apply { body.memoryId(memoryId) }
-
-        /** Optional metadata with groupName defaulting to ["default"] */
-        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
-
-        /**
-         * Sets [Builder.metadata] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -311,7 +283,6 @@ private constructor(
     private constructor(
         private val contents: JsonField<List<Content>>,
         private val memoryId: JsonField<String>,
-        private val metadata: JsonField<Metadata>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -320,16 +291,11 @@ private constructor(
             @JsonProperty("contents")
             @ExcludeMissing
             contents: JsonField<List<Content>> = JsonMissing.of(),
-            @JsonProperty("memoryId")
-            @ExcludeMissing
-            memoryId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            metadata: JsonField<Metadata> = JsonMissing.of(),
-        ) : this(contents, memoryId, metadata, mutableMapOf())
+            @JsonProperty("memoryId") @ExcludeMissing memoryId: JsonField<String> = JsonMissing.of(),
+        ) : this(contents, memoryId, mutableMapOf())
 
         /**
-         * Array of content objects with metadata
+         * Array of content objects with additional properties allowed
          *
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -343,14 +309,6 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun memoryId(): String = memoryId.getRequired("memoryId")
-
-        /**
-         * Optional metadata with groupName defaulting to ["default"]
-         *
-         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * Returns the raw JSON value of [contents].
@@ -367,13 +325,6 @@ private constructor(
          * Unlike [memoryId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("memoryId") @ExcludeMissing fun _memoryId(): JsonField<String> = memoryId
-
-        /**
-         * Returns the raw JSON value of [metadata].
-         *
-         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -406,18 +357,16 @@ private constructor(
 
             private var contents: JsonField<MutableList<Content>>? = null
             private var memoryId: JsonField<String>? = null
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 contents = body.contents.map { it.toMutableList() }
                 memoryId = body.memoryId
-                metadata = body.metadata
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** Array of content objects with metadata */
+            /** Array of content objects with additional properties allowed */
             fun contents(contents: List<Content>) = contents(JsonField.of(contents))
 
             /**
@@ -455,18 +404,6 @@ private constructor(
              */
             fun memoryId(memoryId: JsonField<String>) = apply { this.memoryId = memoryId }
 
-            /** Optional metadata with groupName defaulting to ["default"] */
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-            /**
-             * Sets [Builder.metadata] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -503,7 +440,6 @@ private constructor(
                 Body(
                     checkRequired("contents", contents).map { it.toImmutable() },
                     checkRequired("memoryId", memoryId),
-                    metadata,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -517,7 +453,6 @@ private constructor(
 
             contents().forEach { it.validate() }
             memoryId()
-            metadata().ifPresent { it.validate() }
             validated = true
         }
 
@@ -538,8 +473,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (contents.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-                (if (memoryId.asKnown().isPresent) 1 else 0) +
-                (metadata.asKnown().getOrNull()?.validity() ?: 0)
+                (if (memoryId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -549,49 +483,87 @@ private constructor(
             return other is Body &&
                 contents == other.contents &&
                 memoryId == other.memoryId &&
-                metadata == other.metadata &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(contents, memoryId, metadata, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(contents, memoryId, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{contents=$contents, memoryId=$memoryId, metadata=$metadata, additionalProperties=$additionalProperties}"
+            "Body{contents=$contents, memoryId=$memoryId, additionalProperties=$additionalProperties}"
     }
 
     class Content
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val id: JsonField<String>,
         private val content: JsonField<String>,
+        private val createdAt: JsonField<String>,
         private val metadata: JsonField<Metadata>,
+        private val role: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("createdAt")
+            @ExcludeMissing
+            createdAt: JsonField<String> = JsonMissing.of(),
             @JsonProperty("metadata")
             @ExcludeMissing
             metadata: JsonField<Metadata> = JsonMissing.of(),
-        ) : this(content, metadata, mutableMapOf())
+            @JsonProperty("role") @ExcludeMissing role: JsonField<String> = JsonMissing.of(),
+        ) : this(id, content, createdAt, metadata, role, mutableMapOf())
+
+        /**
+         * Unique message ID
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun id(): Optional<String> = id.getOptional("id")
 
         /**
          * The content of the memory message
          *
-         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun content(): String = content.getRequired("content")
+        fun content(): Optional<String> = content.getOptional("content")
 
         /**
-         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * Creation timestamp
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
+        fun createdAt(): Optional<String> = createdAt.getOptional("createdAt")
+
+        /**
+         * Additional metadata for the message
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
+
+        /**
+         * Role of the message sender (e.g., user, assistant)
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun role(): Optional<String> = role.getOptional("role")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [content].
@@ -601,11 +573,25 @@ private constructor(
         @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<String> = content
 
         /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("createdAt") @ExcludeMissing fun _createdAt(): JsonField<String> = createdAt
+
+        /**
          * Returns the raw JSON value of [metadata].
          *
          * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
+         * Returns the raw JSON value of [role].
+         *
+         * Unlike [role], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("role") @ExcludeMissing fun _role(): JsonField<String> = role
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -621,31 +607,41 @@ private constructor(
 
         companion object {
 
-            /**
-             * Returns a mutable builder for constructing an instance of [Content].
-             *
-             * The following fields are required:
-             * ```java
-             * .content()
-             * .metadata()
-             * ```
-             */
+            /** Returns a mutable builder for constructing an instance of [Content]. */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Content]. */
         class Builder internal constructor() {
 
-            private var content: JsonField<String>? = null
-            private var metadata: JsonField<Metadata>? = null
+            private var id: JsonField<String> = JsonMissing.of()
+            private var content: JsonField<String> = JsonMissing.of()
+            private var createdAt: JsonField<String> = JsonMissing.of()
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
+            private var role: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(content: Content) = apply {
+                id = content.id
                 this.content = content.content
+                createdAt = content.createdAt
                 metadata = content.metadata
+                role = content.role
                 additionalProperties = content.additionalProperties.toMutableMap()
             }
+
+            /** Unique message ID */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** The content of the memory message */
             fun content(content: String) = content(JsonField.of(content))
@@ -659,6 +655,19 @@ private constructor(
              */
             fun content(content: JsonField<String>) = apply { this.content = content }
 
+            /** Creation timestamp */
+            fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
+
+            /** Additional metadata for the message */
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
@@ -669,6 +678,18 @@ private constructor(
              * supported value.
              */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+            /** Role of the message sender (e.g., user, assistant) */
+            fun role(role: String) = role(JsonField.of(role))
+
+            /**
+             * Sets [Builder.role] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.role] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun role(role: JsonField<String>) = apply { this.role = role }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -693,21 +714,9 @@ private constructor(
              * Returns an immutable instance of [Content].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .content()
-             * .metadata()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Content =
-                Content(
-                    checkRequired("content", content),
-                    checkRequired("metadata", metadata),
-                    additionalProperties.toMutableMap(),
-                )
+                Content(id, content, createdAt, metadata, role, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -717,8 +726,11 @@ private constructor(
                 return@apply
             }
 
+            id()
             content()
-            metadata().validate()
+            createdAt()
+            metadata().ifPresent { it.validate() }
+            role()
             validated = true
         }
 
@@ -738,90 +750,41 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (content.asKnown().isPresent) 1 else 0) +
-                (metadata.asKnown().getOrNull()?.validity() ?: 0)
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (content.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (role.asKnown().isPresent) 1 else 0)
 
+        /** Additional metadata for the message */
         class Metadata
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        @JsonCreator
         private constructor(
-            private val messageId: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("messageId")
-                @ExcludeMissing
-                messageId: JsonField<String> = JsonMissing.of()
-            ) : this(messageId, mutableMapOf())
-
-            /**
-             * Unique message ID
-             *
-             * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun messageId(): String = messageId.getRequired("messageId")
-
-            /**
-             * Returns the raw JSON value of [messageId].
-             *
-             * Unlike [messageId], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("messageId")
-            @ExcludeMissing
-            fun _messageId(): JsonField<String> = messageId
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
-                /**
-                 * Returns a mutable builder for constructing an instance of [Metadata].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .messageId()
-                 * ```
-                 */
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [Metadata]. */
             class Builder internal constructor() {
 
-                private var messageId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    messageId = metadata.messageId
                     additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
-
-                /** Unique message ID */
-                fun messageId(messageId: String) = messageId(JsonField.of(messageId))
-
-                /**
-                 * Sets [Builder.messageId] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.messageId] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun messageId(messageId: JsonField<String>) = apply { this.messageId = messageId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -849,19 +812,8 @@ private constructor(
                  * Returns an immutable instance of [Metadata].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .messageId()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): Metadata =
-                    Metadata(
-                        checkRequired("messageId", messageId),
-                        additionalProperties.toMutableMap(),
-                    )
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
 
             private var validated: Boolean = false
@@ -871,7 +823,6 @@ private constructor(
                     return@apply
                 }
 
-                messageId()
                 validated = true
             }
 
@@ -890,24 +841,22 @@ private constructor(
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = (if (messageId.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return other is Metadata &&
-                    messageId == other.messageId &&
-                    additionalProperties == other.additionalProperties
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(messageId, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Metadata{messageId=$messageId, additionalProperties=$additionalProperties}"
+            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -916,181 +865,22 @@ private constructor(
             }
 
             return other is Content &&
+                id == other.id &&
                 content == other.content &&
+                createdAt == other.createdAt &&
                 metadata == other.metadata &&
+                role == other.role &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(content, metadata, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(id, content, createdAt, metadata, role, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Content{content=$content, metadata=$metadata, additionalProperties=$additionalProperties}"
-    }
-
-    /** Optional metadata with groupName defaulting to ["default"] */
-    class Metadata
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val groupName: JsonField<List<String>>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("groupName")
-            @ExcludeMissing
-            groupName: JsonField<List<String>> = JsonMissing.of()
-        ) : this(groupName, mutableMapOf())
-
-        /**
-         * Group names for the memory context
-         *
-         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun groupName(): Optional<List<String>> = groupName.getOptional("groupName")
-
-        /**
-         * Returns the raw JSON value of [groupName].
-         *
-         * Unlike [groupName], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("groupName")
-        @ExcludeMissing
-        fun _groupName(): JsonField<List<String>> = groupName
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Metadata]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Metadata]. */
-        class Builder internal constructor() {
-
-            private var groupName: JsonField<MutableList<String>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(metadata: Metadata) = apply {
-                groupName = metadata.groupName.map { it.toMutableList() }
-                additionalProperties = metadata.additionalProperties.toMutableMap()
-            }
-
-            /** Group names for the memory context */
-            fun groupName(groupName: List<String>) = groupName(JsonField.of(groupName))
-
-            /**
-             * Sets [Builder.groupName] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.groupName] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun groupName(groupName: JsonField<List<String>>) = apply {
-                this.groupName = groupName.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [String] to [Builder.groupName].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addGroupName(groupName: String) = apply {
-                this.groupName =
-                    (this.groupName ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("groupName", it).add(groupName)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Metadata].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Metadata =
-                Metadata(
-                    (groupName ?: JsonMissing.of()).map { it.toImmutable() },
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Metadata = apply {
-            if (validated) {
-                return@apply
-            }
-
-            groupName()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: AlchemystAiInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = (groupName.asKnown().getOrNull()?.size ?: 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Metadata &&
-                groupName == other.groupName &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(groupName, additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Metadata{groupName=$groupName, additionalProperties=$additionalProperties}"
+            "Content{id=$id, content=$content, createdAt=$createdAt, metadata=$metadata, role=$role, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
