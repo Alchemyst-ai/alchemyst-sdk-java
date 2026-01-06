@@ -97,33 +97,33 @@ internal class MemoryServiceTest {
                 MemoryAddParams.builder()
                     .addContent(
                         MemoryAddParams.Content.builder()
+                            .id("msg-1")
                             .content("Customer asked about pricing for the Scale plan.")
+                            .createdAt("2025-01-10T12:34:56.000Z")
                             .metadata(
                                 MemoryAddParams.Content.Metadata.builder()
-                                    .messageId("msg-1")
+                                    .putAdditionalProperty("messageId", JsonValue.from("bar"))
                                     .build()
                             )
+                            .role("user")
                             .build()
                     )
                     .addContent(
                         MemoryAddParams.Content.builder()
+                            .id("msg-2")
                             .content(
                                 "Explained the Scale plan pricing and shared the pricing page link."
                             )
+                            .createdAt("2025-01-10T12:35:30.000Z")
                             .metadata(
                                 MemoryAddParams.Content.Metadata.builder()
-                                    .messageId("msg-2")
+                                    .putAdditionalProperty("messageId", JsonValue.from("bar"))
                                     .build()
                             )
+                            .role("assistant")
                             .build()
                     )
                     .memoryId("support-thread-TCK-1234")
-                    .metadata(
-                        MemoryAddParams.Metadata.builder()
-                            .addGroupName("support")
-                            .addGroupName("pricing")
-                            .build()
-                    )
                     .build()
             )
 
