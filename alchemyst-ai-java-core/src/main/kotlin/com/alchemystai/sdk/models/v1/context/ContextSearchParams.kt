@@ -936,18 +936,11 @@ private constructor(
 
         companion object {
 
-            @JvmField val TRUE = of("true")
-
-            @JvmField val FALSE = of("false")
-
             @JvmStatic fun of(value: String) = Metadata(JsonField.of(value))
         }
 
         /** An enum containing [Metadata]'s known values. */
-        enum class Known {
-            TRUE,
-            FALSE,
-        }
+        enum class Known {}
 
         /**
          * An enum containing [Metadata]'s known values, as well as an [_UNKNOWN] member.
@@ -959,10 +952,8 @@ private constructor(
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            TRUE,
-            FALSE,
             /** An enum member indicating that [Metadata] was instantiated with an unknown value. */
-            _UNKNOWN,
+            _UNKNOWN
         }
 
         /**
@@ -974,8 +965,6 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                TRUE -> Value.TRUE
-                FALSE -> Value.FALSE
                 else -> Value._UNKNOWN
             }
 
@@ -990,8 +979,6 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                TRUE -> Known.TRUE
-                FALSE -> Known.FALSE
                 else -> throw AlchemystAiInvalidDataException("Unknown Metadata: $value")
             }
 

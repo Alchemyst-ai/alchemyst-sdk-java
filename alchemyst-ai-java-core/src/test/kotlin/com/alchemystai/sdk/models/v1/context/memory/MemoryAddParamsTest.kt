@@ -2,7 +2,6 @@
 
 package com.alchemystai.sdk.models.v1.context.memory
 
-import com.alchemystai.sdk.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,31 +12,23 @@ internal class MemoryAddParamsTest {
         MemoryAddParams.builder()
             .addContent(
                 MemoryAddParams.Content.builder()
-                    .id("msg-1")
                     .content("Customer asked about pricing for the Scale plan.")
-                    .createdAt("2025-01-10T12:34:56.000Z")
-                    .metadata(
-                        MemoryAddParams.Content.Metadata.builder()
-                            .putAdditionalProperty("messageId", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .role("user")
+                    .metadata(MemoryAddParams.Content.Metadata.builder().messageId("msg-1").build())
                     .build()
             )
             .addContent(
                 MemoryAddParams.Content.builder()
-                    .id("msg-2")
                     .content("Explained the Scale plan pricing and shared the pricing page link.")
-                    .createdAt("2025-01-10T12:35:30.000Z")
-                    .metadata(
-                        MemoryAddParams.Content.Metadata.builder()
-                            .putAdditionalProperty("messageId", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .role("assistant")
+                    .metadata(MemoryAddParams.Content.Metadata.builder().messageId("msg-2").build())
                     .build()
             )
             .memoryId("support-thread-TCK-1234")
+            .metadata(
+                MemoryAddParams.Metadata.builder()
+                    .addGroupName("support")
+                    .addGroupName("pricing")
+                    .build()
+            )
             .build()
     }
 
@@ -47,33 +38,29 @@ internal class MemoryAddParamsTest {
             MemoryAddParams.builder()
                 .addContent(
                     MemoryAddParams.Content.builder()
-                        .id("msg-1")
                         .content("Customer asked about pricing for the Scale plan.")
-                        .createdAt("2025-01-10T12:34:56.000Z")
                         .metadata(
-                            MemoryAddParams.Content.Metadata.builder()
-                                .putAdditionalProperty("messageId", JsonValue.from("bar"))
-                                .build()
+                            MemoryAddParams.Content.Metadata.builder().messageId("msg-1").build()
                         )
-                        .role("user")
                         .build()
                 )
                 .addContent(
                     MemoryAddParams.Content.builder()
-                        .id("msg-2")
                         .content(
                             "Explained the Scale plan pricing and shared the pricing page link."
                         )
-                        .createdAt("2025-01-10T12:35:30.000Z")
                         .metadata(
-                            MemoryAddParams.Content.Metadata.builder()
-                                .putAdditionalProperty("messageId", JsonValue.from("bar"))
-                                .build()
+                            MemoryAddParams.Content.Metadata.builder().messageId("msg-2").build()
                         )
-                        .role("assistant")
                         .build()
                 )
                 .memoryId("support-thread-TCK-1234")
+                .metadata(
+                    MemoryAddParams.Metadata.builder()
+                        .addGroupName("support")
+                        .addGroupName("pricing")
+                        .build()
+                )
                 .build()
 
         val body = params._body()
@@ -81,37 +68,46 @@ internal class MemoryAddParamsTest {
         assertThat(body.contents())
             .containsExactly(
                 MemoryAddParams.Content.builder()
-                    .id("msg-1")
                     .content("Customer asked about pricing for the Scale plan.")
-                    .createdAt("2025-01-10T12:34:56.000Z")
-                    .metadata(
-                        MemoryAddParams.Content.Metadata.builder()
-                            .putAdditionalProperty("messageId", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .role("user")
+                    .metadata(MemoryAddParams.Content.Metadata.builder().messageId("msg-1").build())
                     .build(),
                 MemoryAddParams.Content.builder()
-                    .id("msg-2")
                     .content("Explained the Scale plan pricing and shared the pricing page link.")
-                    .createdAt("2025-01-10T12:35:30.000Z")
-                    .metadata(
-                        MemoryAddParams.Content.Metadata.builder()
-                            .putAdditionalProperty("messageId", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .role("assistant")
+                    .metadata(MemoryAddParams.Content.Metadata.builder().messageId("msg-2").build())
                     .build(),
             )
         assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.metadata())
+            .contains(
+                MemoryAddParams.Metadata.builder()
+                    .addGroupName("support")
+                    .addGroupName("pricing")
+                    .build()
+            )
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
             MemoryAddParams.builder()
-                .addContent(MemoryAddParams.Content.builder().build())
-                .addContent(MemoryAddParams.Content.builder().build())
+                .addContent(
+                    MemoryAddParams.Content.builder()
+                        .content("Customer asked about pricing for the Scale plan.")
+                        .metadata(
+                            MemoryAddParams.Content.Metadata.builder().messageId("msg-1").build()
+                        )
+                        .build()
+                )
+                .addContent(
+                    MemoryAddParams.Content.builder()
+                        .content(
+                            "Explained the Scale plan pricing and shared the pricing page link."
+                        )
+                        .metadata(
+                            MemoryAddParams.Content.Metadata.builder().messageId("msg-2").build()
+                        )
+                        .build()
+                )
                 .memoryId("support-thread-TCK-1234")
                 .build()
 
@@ -119,8 +115,14 @@ internal class MemoryAddParamsTest {
 
         assertThat(body.contents())
             .containsExactly(
-                MemoryAddParams.Content.builder().build(),
-                MemoryAddParams.Content.builder().build(),
+                MemoryAddParams.Content.builder()
+                    .content("Customer asked about pricing for the Scale plan.")
+                    .metadata(MemoryAddParams.Content.Metadata.builder().messageId("msg-1").build())
+                    .build(),
+                MemoryAddParams.Content.builder()
+                    .content("Explained the Scale plan pricing and shared the pricing page link.")
+                    .metadata(MemoryAddParams.Content.Metadata.builder().messageId("msg-2").build())
+                    .build(),
             )
         assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
     }
