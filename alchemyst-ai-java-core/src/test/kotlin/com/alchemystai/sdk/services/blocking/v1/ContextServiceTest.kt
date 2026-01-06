@@ -89,7 +89,7 @@ internal class ContextServiceTest {
         val response =
             contextService.search(
                 ContextSearchParams.builder()
-                    .metadata(ContextSearchParams.Metadata.TRUE)
+                    .metadata(JsonValue.from(null))
                     .mode(ContextSearchParams.Mode.FAST)
                     .minimumSimilarityThreshold(0.5)
                     .query("What did the customer ask about pricing for the Scale plan?")

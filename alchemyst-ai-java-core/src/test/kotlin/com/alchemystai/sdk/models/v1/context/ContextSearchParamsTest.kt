@@ -12,7 +12,7 @@ internal class ContextSearchParamsTest {
     @Test
     fun create() {
         ContextSearchParams.builder()
-            .metadata(ContextSearchParams.Metadata.TRUE)
+            .metadata(JsonValue.from(null))
             .mode(ContextSearchParams.Mode.FAST)
             .minimumSimilarityThreshold(0.5)
             .query("What did the customer ask about pricing for the Scale plan?")
@@ -27,7 +27,7 @@ internal class ContextSearchParamsTest {
     fun queryParams() {
         val params =
             ContextSearchParams.builder()
-                .metadata(ContextSearchParams.Metadata.TRUE)
+                .metadata(JsonValue.from(null))
                 .mode(ContextSearchParams.Mode.FAST)
                 .minimumSimilarityThreshold(0.5)
                 .query("What did the customer ask about pricing for the Scale plan?")
@@ -40,7 +40,9 @@ internal class ContextSearchParamsTest {
         val queryParams = params._queryParams()
 
         assertThat(queryParams)
-            .isEqualTo(QueryParams.builder().put("metadata", "true").put("mode", "fast").build())
+            .isEqualTo(
+                QueryParams.builder().put("metadata", "undefined").put("mode", "fast").build()
+            )
     }
 
     @Test
@@ -61,7 +63,7 @@ internal class ContextSearchParamsTest {
     fun body() {
         val params =
             ContextSearchParams.builder()
-                .metadata(ContextSearchParams.Metadata.TRUE)
+                .metadata(JsonValue.from(null))
                 .mode(ContextSearchParams.Mode.FAST)
                 .minimumSimilarityThreshold(0.5)
                 .query("What did the customer ask about pricing for the Scale plan?")
