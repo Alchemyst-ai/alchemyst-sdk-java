@@ -6,6 +6,8 @@ import com.alchemystai.sdk.core.ClientOptions
 import com.alchemystai.sdk.core.RequestOptions
 import com.alchemystai.sdk.core.http.HttpResponse
 import com.alchemystai.sdk.core.http.HttpResponseFor
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateResponse
@@ -41,6 +43,15 @@ interface MemoryService {
 
     /** @see delete */
     fun delete(params: MemoryDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
+
+    /** This endpoint adds memory (chat history) as context. */
+    fun add(params: MemoryAddParams): MemoryAddResponse = add(params, RequestOptions.none())
+
+    /** @see add */
+    fun add(
+        params: MemoryAddParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MemoryAddResponse
 
     /** A view of [MemoryService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -80,5 +91,20 @@ interface MemoryService {
             params: MemoryDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post /api/v1/context/memory/add`, but is otherwise the
+         * same as [MemoryService.add].
+         */
+        @MustBeClosed
+        fun add(params: MemoryAddParams): HttpResponseFor<MemoryAddResponse> =
+            add(params, RequestOptions.none())
+
+        /** @see add */
+        @MustBeClosed
+        fun add(
+            params: MemoryAddParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MemoryAddResponse>
     }
 }
