@@ -7,13 +7,13 @@
 
 <!-- x-release-please-end -->
 
-The Alchemyst AI Java SDK provides convenient access to the [Alchemyst AI REST API](https://docs.getalchemystai.com) from applications written in Java.
+The Alchemyst AI Java SDK provides convenient access to the [Alchemyst AI REST API](https://getalchemystai.com/docs) from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [docs.getalchemystai.com](https://docs.getalchemystai.com). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.alchemystai.sdk/alchemyst-ai-java/0.0.1).
+The REST API documentation can be found on [getalchemystai.com](https://getalchemystai.com/docs). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.alchemystai.sdk/alchemyst-ai-java/0.0.1).
 
 <!-- x-release-please-end -->
 

@@ -21,6 +21,8 @@ import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteResponse
 import com.alchemystai.sdk.models.v1.context.ContextSearchParams
 import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
+import com.alchemystai.sdk.services.async.v1.context.AddAsyncServiceAsync
+import com.alchemystai.sdk.services.async.v1.context.AddAsyncServiceAsyncImpl
 import com.alchemystai.sdk.services.async.v1.context.MemoryServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.MemoryServiceAsyncImpl
 import com.alchemystai.sdk.services.async.v1.context.TraceServiceAsync
@@ -43,6 +45,8 @@ class ContextServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     private val memory: MemoryServiceAsync by lazy { MemoryServiceAsyncImpl(clientOptions) }
 
+    private val addAsync: AddAsyncServiceAsync by lazy { AddAsyncServiceAsyncImpl(clientOptions) }
+
     override fun withRawResponse(): ContextServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ContextServiceAsync =
@@ -53,6 +57,8 @@ class ContextServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun view(): ViewServiceAsync = view
 
     override fun memory(): MemoryServiceAsync = memory
+
+    override fun addAsync(): AddAsyncServiceAsync = addAsync
 
     override fun delete(
         params: ContextDeleteParams,
@@ -93,6 +99,10 @@ class ContextServiceAsyncImpl internal constructor(private val clientOptions: Cl
             MemoryServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val addAsync: AddAsyncServiceAsync.WithRawResponse by lazy {
+            AddAsyncServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): ContextServiceAsync.WithRawResponse =
@@ -105,6 +115,8 @@ class ContextServiceAsyncImpl internal constructor(private val clientOptions: Cl
         override fun view(): ViewServiceAsync.WithRawResponse = view
 
         override fun memory(): MemoryServiceAsync.WithRawResponse = memory
+
+        override fun addAsync(): AddAsyncServiceAsync.WithRawResponse = addAsync
 
         private val deleteHandler: Handler<ContextDeleteResponse> =
             jsonHandler<ContextDeleteResponse>(clientOptions.jsonMapper)

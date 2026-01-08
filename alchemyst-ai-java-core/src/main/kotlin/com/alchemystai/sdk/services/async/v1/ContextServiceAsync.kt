@@ -11,6 +11,7 @@ import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteResponse
 import com.alchemystai.sdk.models.v1.context.ContextSearchParams
 import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
+import com.alchemystai.sdk.services.async.v1.context.AddAsyncServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.MemoryServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.TraceServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.ViewServiceAsync
@@ -36,6 +37,8 @@ interface ContextServiceAsync {
     fun view(): ViewServiceAsync
 
     fun memory(): MemoryServiceAsync
+
+    fun addAsync(): AddAsyncServiceAsync
 
     /**
      * This endpoint deletes context data based on the provided parameters. It returns a success or
@@ -95,6 +98,8 @@ interface ContextServiceAsync {
         fun view(): ViewServiceAsync.WithRawResponse
 
         fun memory(): MemoryServiceAsync.WithRawResponse
+
+        fun addAsync(): AddAsyncServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/delete`, but is otherwise the same
