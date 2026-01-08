@@ -6,8 +6,6 @@ import com.alchemystai.sdk.core.ClientOptions
 import com.alchemystai.sdk.core.RequestOptions
 import com.alchemystai.sdk.core.http.HttpResponse
 import com.alchemystai.sdk.core.http.HttpResponseFor
-import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
-import com.alchemystai.sdk.models.v1.context.memory.MemoryAddResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateResponse
@@ -47,16 +45,6 @@ interface MemoryServiceAsync {
         params: MemoryDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
-
-    /** This endpoint adds memory (chat history) as context. */
-    fun add(params: MemoryAddParams): CompletableFuture<MemoryAddResponse> =
-        add(params, RequestOptions.none())
-
-    /** @see add */
-    fun add(
-        params: MemoryAddParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MemoryAddResponse>
 
     /**
      * A view of [MemoryServiceAsync] that provides access to raw HTTP responses for each method.
@@ -99,18 +87,5 @@ interface MemoryServiceAsync {
             params: MemoryDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse>
-
-        /**
-         * Returns a raw HTTP response for `post /api/v1/context/memory/add`, but is otherwise the
-         * same as [MemoryServiceAsync.add].
-         */
-        fun add(params: MemoryAddParams): CompletableFuture<HttpResponseFor<MemoryAddResponse>> =
-            add(params, RequestOptions.none())
-
-        /** @see add */
-        fun add(
-            params: MemoryAddParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MemoryAddResponse>>
     }
 }

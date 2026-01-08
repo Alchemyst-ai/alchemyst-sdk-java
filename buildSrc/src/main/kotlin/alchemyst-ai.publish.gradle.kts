@@ -11,7 +11,7 @@ configure<PublishingExtension> {
             pom {
                 name.set("Alchemyst AI API v1 documentation")
                 description.set("v1 API documentation for Alchemyst AI")
-                url.set("https://docs.getalchemystai.com")
+                url.set("https://getalchemystai.com/docs")
 
                 licenses {
                     license {
