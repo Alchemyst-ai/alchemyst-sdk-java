@@ -5,6 +5,7 @@ package com.alchemystai.sdk.services.async.v1.context
 import com.alchemystai.sdk.TestServerExtension
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClientAsync
 import com.alchemystai.sdk.core.JsonValue
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
 import org.junit.jupiter.api.Disabled
@@ -83,5 +84,37 @@ internal class MemoryServiceAsyncTest {
             )
 
         val response = future.get()
+    }
+
+    @Disabled("Prism tests are disabled")
+    @Test
+    fun add() {
+        val client =
+            AlchemystAiOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val memoryServiceAsync = client.v1().context().memory()
+
+        val responseFuture =
+            memoryServiceAsync.add(
+                MemoryAddParams.builder()
+                    .addContent(
+                        MemoryAddParams.Content.builder()
+                            .content("Customer asked about pricing for the Scale plan.")
+                            .metadata(
+                                MemoryAddParams.Content.Metadata.builder()
+                                    .messageId("messageId")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .sessionId("support-thread-TCK-1234")
+                    .metadata(MemoryAddParams.Metadata.builder().addGroupName("string").build())
+                    .build()
+            )
+
+        val response = responseFuture.get()
+        response.validate()
     }
 }

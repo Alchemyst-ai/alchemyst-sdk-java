@@ -16,6 +16,8 @@ import com.alchemystai.sdk.core.http.HttpResponseFor
 import com.alchemystai.sdk.core.http.json
 import com.alchemystai.sdk.core.http.parseable
 import com.alchemystai.sdk.core.prepare
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateResponse
@@ -44,6 +46,10 @@ class MemoryServiceImpl internal constructor(private val clientOptions: ClientOp
         // post /api/v1/context/memory/delete
         withRawResponse().delete(params, requestOptions)
     }
+
+    override fun add(params: MemoryAddParams, requestOptions: RequestOptions): MemoryAddResponse =
+        // post /api/v1/context/memory/add
+        withRawResponse().add(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MemoryService.WithRawResponse {
@@ -104,6 +110,34 @@ class MemoryServiceImpl internal constructor(private val clientOptions: ClientOp
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { deleteHandler.handle(it) }
+            }
+        }
+
+        private val addHandler: Handler<MemoryAddResponse> =
+            jsonHandler<MemoryAddResponse>(clientOptions.jsonMapper)
+
+        override fun add(
+            params: MemoryAddParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MemoryAddResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("api", "v1", "context", "memory", "add")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { addHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
     }
