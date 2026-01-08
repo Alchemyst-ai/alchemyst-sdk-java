@@ -105,7 +105,7 @@ internal class MemoryServiceTest {
                             )
                             .build()
                     )
-                    .memoryId("support-thread-TCK-1234")
+                    .sessionId("support-thread-TCK-1234")
                     .metadata(MemoryAddParams.Metadata.builder().addGroupName("string").build())
                     .build()
             )
