@@ -18,7 +18,7 @@ internal class MemoryAddParamsTest {
                     )
                     .build()
             )
-            .memoryId("support-thread-TCK-1234")
+            .sessionId("support-thread-TCK-1234")
             .metadata(MemoryAddParams.Metadata.builder().addGroupName("string").build())
             .build()
     }
@@ -37,7 +37,7 @@ internal class MemoryAddParamsTest {
                         )
                         .build()
                 )
-                .memoryId("support-thread-TCK-1234")
+                .sessionId("support-thread-TCK-1234")
                 .metadata(MemoryAddParams.Metadata.builder().addGroupName("string").build())
                 .build()
 
@@ -52,7 +52,7 @@ internal class MemoryAddParamsTest {
                     )
                     .build()
             )
-        assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.sessionId()).isEqualTo("support-thread-TCK-1234")
         assertThat(body.metadata())
             .contains(MemoryAddParams.Metadata.builder().addGroupName("string").build())
     }
@@ -66,7 +66,7 @@ internal class MemoryAddParamsTest {
                         .content("Customer asked about pricing for the Scale plan.")
                         .build()
                 )
-                .memoryId("support-thread-TCK-1234")
+                .sessionId("support-thread-TCK-1234")
                 .build()
 
         val body = params._body()
@@ -77,6 +77,6 @@ internal class MemoryAddParamsTest {
                     .content("Customer asked about pricing for the Scale plan.")
                     .build()
             )
-        assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.sessionId()).isEqualTo("support-thread-TCK-1234")
     }
 }
