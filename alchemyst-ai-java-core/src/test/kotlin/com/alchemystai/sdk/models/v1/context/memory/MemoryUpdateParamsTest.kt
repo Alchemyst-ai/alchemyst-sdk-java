@@ -37,7 +37,7 @@ internal class MemoryUpdateParamsTest {
                     .role("assistant")
                     .build()
             )
-            .memoryId("support-thread-TCK-1234")
+            .sessionId("support-thread-TCK-1234")
             .build()
     }
 
@@ -71,7 +71,7 @@ internal class MemoryUpdateParamsTest {
                         .role("assistant")
                         .build()
                 )
-                .memoryId("support-thread-TCK-1234")
+                .sessionId("support-thread-TCK-1234")
                 .build()
 
         val body = params._body()
@@ -101,7 +101,7 @@ internal class MemoryUpdateParamsTest {
                     .role("assistant")
                     .build(),
             )
-        assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.sessionId()).isEqualTo("support-thread-TCK-1234")
     }
 
     @Test
@@ -110,7 +110,7 @@ internal class MemoryUpdateParamsTest {
             MemoryUpdateParams.builder()
                 .addContent(MemoryUpdateParams.Content.builder().build())
                 .addContent(MemoryUpdateParams.Content.builder().build())
-                .memoryId("support-thread-TCK-1234")
+                .sessionId("support-thread-TCK-1234")
                 .build()
 
         val body = params._body()
@@ -120,6 +120,6 @@ internal class MemoryUpdateParamsTest {
                 MemoryUpdateParams.Content.builder().build(),
                 MemoryUpdateParams.Content.builder().build(),
             )
-        assertThat(body.memoryId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.sessionId()).isEqualTo("support-thread-TCK-1234")
     }
 }

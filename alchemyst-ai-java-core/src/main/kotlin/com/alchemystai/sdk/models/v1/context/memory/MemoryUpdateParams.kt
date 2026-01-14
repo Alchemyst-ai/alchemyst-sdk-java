@@ -44,7 +44,7 @@ private constructor(
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun memoryId(): String = body.memoryId()
+    fun sessionId(): String = body.sessionId()
 
     /**
      * Returns the raw JSON value of [contents].
@@ -54,11 +54,11 @@ private constructor(
     fun _contents(): JsonField<List<Content>> = body._contents()
 
     /**
-     * Returns the raw JSON value of [memoryId].
+     * Returns the raw JSON value of [sessionId].
      *
-     * Unlike [memoryId], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [sessionId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _memoryId(): JsonField<String> = body._memoryId()
+    fun _sessionId(): JsonField<String> = body._sessionId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -78,7 +78,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .contents()
-         * .memoryId()
+         * .sessionId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -104,7 +104,7 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [contents]
-         * - [memoryId]
+         * - [sessionId]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -128,15 +128,16 @@ private constructor(
         fun addContent(content: Content) = apply { body.addContent(content) }
 
         /** The ID of the memory to update */
-        fun memoryId(memoryId: String) = apply { body.memoryId(memoryId) }
+        fun sessionId(sessionId: String) = apply { body.sessionId(sessionId) }
 
         /**
-         * Sets [Builder.memoryId] to an arbitrary JSON value.
+         * Sets [Builder.sessionId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.memoryId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.sessionId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun memoryId(memoryId: JsonField<String>) = apply { body.memoryId(memoryId) }
+        fun sessionId(sessionId: JsonField<String>) = apply { body.sessionId(sessionId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -263,7 +264,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .contents()
-         * .memoryId()
+         * .sessionId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -286,7 +287,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val contents: JsonField<List<Content>>,
-        private val memoryId: JsonField<String>,
+        private val sessionId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -295,8 +296,10 @@ private constructor(
             @JsonProperty("contents")
             @ExcludeMissing
             contents: JsonField<List<Content>> = JsonMissing.of(),
-            @JsonProperty("memoryId") @ExcludeMissing memoryId: JsonField<String> = JsonMissing.of(),
-        ) : this(contents, memoryId, mutableMapOf())
+            @JsonProperty("sessionId")
+            @ExcludeMissing
+            sessionId: JsonField<String> = JsonMissing.of(),
+        ) : this(contents, sessionId, mutableMapOf())
 
         /**
          * Array of updated content objects
@@ -312,7 +315,7 @@ private constructor(
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun memoryId(): String = memoryId.getRequired("memoryId")
+        fun sessionId(): String = sessionId.getRequired("sessionId")
 
         /**
          * Returns the raw JSON value of [contents].
@@ -324,11 +327,11 @@ private constructor(
         fun _contents(): JsonField<List<Content>> = contents
 
         /**
-         * Returns the raw JSON value of [memoryId].
+         * Returns the raw JSON value of [sessionId].
          *
-         * Unlike [memoryId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [sessionId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("memoryId") @ExcludeMissing fun _memoryId(): JsonField<String> = memoryId
+        @JsonProperty("sessionId") @ExcludeMissing fun _sessionId(): JsonField<String> = sessionId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -350,7 +353,7 @@ private constructor(
              * The following fields are required:
              * ```java
              * .contents()
-             * .memoryId()
+             * .sessionId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -360,13 +363,13 @@ private constructor(
         class Builder internal constructor() {
 
             private var contents: JsonField<MutableList<Content>>? = null
-            private var memoryId: JsonField<String>? = null
+            private var sessionId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 contents = body.contents.map { it.toMutableList() }
-                memoryId = body.memoryId
+                sessionId = body.sessionId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -397,16 +400,16 @@ private constructor(
             }
 
             /** The ID of the memory to update */
-            fun memoryId(memoryId: String) = memoryId(JsonField.of(memoryId))
+            fun sessionId(sessionId: String) = sessionId(JsonField.of(sessionId))
 
             /**
-             * Sets [Builder.memoryId] to an arbitrary JSON value.
+             * Sets [Builder.sessionId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.memoryId] with a well-typed [String] value instead.
+             * You should usually call [Builder.sessionId] with a well-typed [String] value instead.
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun memoryId(memoryId: JsonField<String>) = apply { this.memoryId = memoryId }
+            fun sessionId(sessionId: JsonField<String>) = apply { this.sessionId = sessionId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -435,7 +438,7 @@ private constructor(
              * The following fields are required:
              * ```java
              * .contents()
-             * .memoryId()
+             * .sessionId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -443,7 +446,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("contents", contents).map { it.toImmutable() },
-                    checkRequired("memoryId", memoryId),
+                    checkRequired("sessionId", sessionId),
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -456,7 +459,7 @@ private constructor(
             }
 
             contents().forEach { it.validate() }
-            memoryId()
+            sessionId()
             validated = true
         }
 
@@ -477,7 +480,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (contents.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-                (if (memoryId.asKnown().isPresent) 1 else 0)
+                (if (sessionId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -486,16 +489,18 @@ private constructor(
 
             return other is Body &&
                 contents == other.contents &&
-                memoryId == other.memoryId &&
+                sessionId == other.sessionId &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(contents, memoryId, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(contents, sessionId, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{contents=$contents, memoryId=$memoryId, additionalProperties=$additionalProperties}"
+            "Body{contents=$contents, sessionId=$sessionId, additionalProperties=$additionalProperties}"
     }
 
     class Content

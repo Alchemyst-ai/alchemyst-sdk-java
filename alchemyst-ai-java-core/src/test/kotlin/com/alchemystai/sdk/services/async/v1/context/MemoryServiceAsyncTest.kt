@@ -54,7 +54,7 @@ internal class MemoryServiceAsyncTest {
                             .role("assistant")
                             .build()
                     )
-                    .memoryId("support-thread-TCK-1234")
+                    .sessionId("support-thread-TCK-1234")
                     .build()
             )
 
