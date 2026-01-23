@@ -25,6 +25,12 @@ private constructor(
         @JsonProperty("contexts") @ExcludeMissing contexts: JsonValue = JsonMissing.of()
     ) : this(contexts, mutableMapOf())
 
+    /**
+     * This arbitrary value can be deserialized into a custom type using the `convert` method:
+     * ```java
+     * MyClass myObject = contextViewResponse.contexts().convert(MyClass.class);
+     * ```
+     */
     @JsonProperty("contexts") @ExcludeMissing fun _contexts(): JsonValue = contexts
 
     @JsonAnySetter

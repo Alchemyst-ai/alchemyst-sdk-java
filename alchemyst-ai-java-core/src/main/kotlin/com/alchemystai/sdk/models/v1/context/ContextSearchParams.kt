@@ -73,7 +73,14 @@ private constructor(
      */
     fun similarityThreshold(): Double = body.similarityThreshold()
 
-    /** Additional metadata for the search */
+    /**
+     * Additional metadata for the search
+     *
+     * This arbitrary value can be deserialized into a custom type using the `convert` method:
+     * ```java
+     * MyClass myObject = contextSearchParams.bodyMetadata().convert(MyClass.class);
+     * ```
+     */
     fun _bodyMetadata(): JsonValue = body._bodyMetadata()
 
     /**
@@ -491,7 +498,14 @@ private constructor(
          */
         fun similarityThreshold(): Double = similarityThreshold.getRequired("similarity_threshold")
 
-        /** Additional metadata for the search */
+        /**
+         * Additional metadata for the search
+         *
+         * This arbitrary value can be deserialized into a custom type using the `convert` method:
+         * ```java
+         * MyClass myObject = body.bodyMetadata().convert(MyClass.class);
+         * ```
+         */
         @JsonProperty("body_metadata") @ExcludeMissing fun _bodyMetadata(): JsonValue = bodyMetadata
 
         /**
