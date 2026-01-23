@@ -196,7 +196,14 @@ private constructor(
          */
         fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("createdAt")
 
-        /** Only included when query parameter metadata=true */
+        /**
+         * Only included when query parameter metadata=true
+         *
+         * This arbitrary value can be deserialized into a custom type using the `convert` method:
+         * ```java
+         * MyClass myObject = context.metadata().convert(MyClass.class);
+         * ```
+         */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
 
         /**

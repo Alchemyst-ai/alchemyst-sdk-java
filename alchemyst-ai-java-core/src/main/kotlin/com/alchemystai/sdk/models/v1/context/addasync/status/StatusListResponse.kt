@@ -245,6 +245,12 @@ private constructor(
          */
         fun attemptsMade(): Double = attemptsMade.getRequired("attemptsMade")
 
+        /**
+         * This arbitrary value can be deserialized into a custom type using the `convert` method:
+         * ```java
+         * MyClass myObject = job.data().convert(MyClass.class);
+         * ```
+         */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
 
         /**

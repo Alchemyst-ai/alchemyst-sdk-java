@@ -603,6 +603,12 @@ private constructor(
          */
         fun createdAt(): OffsetDateTime = createdAt.getRequired("createdAt")
 
+        /**
+         * This arbitrary value can be deserialized into a custom type using the `convert` method:
+         * ```java
+         * MyClass myObject = trace.data().convert(MyClass.class);
+         * ```
+         */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
 
         /**

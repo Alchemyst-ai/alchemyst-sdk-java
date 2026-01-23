@@ -102,7 +102,14 @@ private constructor(
      */
     fun processedOn(): Optional<Double> = processedOn.getOptional("processedOn")
 
-    /** Result of the job (if available) */
+    /**
+     * Result of the job (if available)
+     *
+     * This arbitrary value can be deserialized into a custom type using the `convert` method:
+     * ```java
+     * MyClass myObject = statusRetrieveResponse.result().convert(MyClass.class);
+     * ```
+     */
     @JsonProperty("result") @ExcludeMissing fun _result(): JsonValue = result
 
     /**
