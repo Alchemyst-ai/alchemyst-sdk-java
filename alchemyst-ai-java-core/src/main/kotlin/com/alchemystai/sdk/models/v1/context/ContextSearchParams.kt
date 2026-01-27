@@ -27,10 +27,27 @@ import kotlin.jvm.optionals.getOrNull
  */
 class ContextSearchParams
 private constructor(
+    private val metadata: Metadata?,
+    private val mode: Mode?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /**
+     * Controls whether metadata is included in the response:
+     * - metadata=true → metadata will be included in each context item in the response.
+     * - metadata=false (or omitted) → metadata will be excluded from the response for better
+     *   performance.
+     */
+    fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+
+    /**
+     * Controls the search mode:
+     * - mode=fast → prioritizes speed over completeness.
+     * - mode=standard → performs a comprehensive search (default if omitted).
+     */
+    fun mode(): Optional<Mode> = Optional.ofNullable(mode)
 
     /**
      * Minimum similarity threshold
@@ -56,8 +73,15 @@ private constructor(
      */
     fun similarityThreshold(): Double = body.similarityThreshold()
 
-    /** Additional metadata for the search */
-    fun _metadata(): JsonValue = body._metadata()
+    /**
+     * Additional metadata for the search
+     *
+     * This arbitrary value can be deserialized into a custom type using the `convert` method:
+     * ```java
+     * MyClass myObject = contextSearchParams.bodyMetadata().convert(MyClass.class);
+     * ```
+     */
+    fun _bodyMetadata(): JsonValue = body._bodyMetadata()
 
     /**
      * Search scope
@@ -73,7 +97,7 @@ private constructor(
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun userId(): Optional<String> = body.userId()
+    @Deprecated("deprecated") fun userId(): Optional<String> = body.userId()
 
     /**
      * Returns the raw JSON value of [minimumSimilarityThreshold].
@@ -110,7 +134,7 @@ private constructor(
      *
      * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _userId(): JsonField<String> = body._userId()
+    @Deprecated("deprecated") fun _userId(): JsonField<String> = body._userId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -140,16 +164,41 @@ private constructor(
     /** A builder for [ContextSearchParams]. */
     class Builder internal constructor() {
 
+        private var metadata: Metadata? = null
+        private var mode: Mode? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(contextSearchParams: ContextSearchParams) = apply {
+            metadata = contextSearchParams.metadata
+            mode = contextSearchParams.mode
             body = contextSearchParams.body.toBuilder()
             additionalHeaders = contextSearchParams.additionalHeaders.toBuilder()
             additionalQueryParams = contextSearchParams.additionalQueryParams.toBuilder()
         }
+
+        /**
+         * Controls whether metadata is included in the response:
+         * - metadata=true → metadata will be included in each context item in the response.
+         * - metadata=false (or omitted) → metadata will be excluded from the response for better
+         *   performance.
+         */
+        fun metadata(metadata: Metadata?) = apply { this.metadata = metadata }
+
+        /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
+
+        /**
+         * Controls the search mode:
+         * - mode=fast → prioritizes speed over completeness.
+         * - mode=standard → performs a comprehensive search (default if omitted).
+         */
+        fun mode(mode: Mode?) = apply { this.mode = mode }
+
+        /** Alias for calling [Builder.mode] with `mode.orElse(null)`. */
+        fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -159,7 +208,7 @@ private constructor(
          * - [minimumSimilarityThreshold]
          * - [query]
          * - [similarityThreshold]
-         * - [metadata]
+         * - [bodyMetadata]
          * - [scope]
          * - etc.
          */
@@ -209,7 +258,7 @@ private constructor(
         }
 
         /** Additional metadata for the search */
-        fun metadata(metadata: JsonValue) = apply { body.metadata(metadata) }
+        fun bodyMetadata(bodyMetadata: JsonValue) = apply { body.bodyMetadata(bodyMetadata) }
 
         /** Search scope */
         fun scope(scope: Scope) = apply { body.scope(scope) }
@@ -223,7 +272,7 @@ private constructor(
         fun scope(scope: JsonField<Scope>) = apply { body.scope(scope) }
 
         /** The ID of the user making the request */
-        fun userId(userId: String) = apply { body.userId(userId) }
+        @Deprecated("deprecated") fun userId(userId: String) = apply { body.userId(userId) }
 
         /**
          * Sets [Builder.userId] to an arbitrary JSON value.
@@ -231,6 +280,7 @@ private constructor(
          * You should usually call [Builder.userId] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
+        @Deprecated("deprecated")
         fun userId(userId: JsonField<String>) = apply { body.userId(userId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -366,6 +416,8 @@ private constructor(
          */
         fun build(): ContextSearchParams =
             ContextSearchParams(
+                metadata,
+                mode,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -376,7 +428,14 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                metadata?.let { put("metadata", it.toString()) }
+                mode?.let { put("mode", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -384,7 +443,7 @@ private constructor(
         private val minimumSimilarityThreshold: JsonField<Double>,
         private val query: JsonField<String>,
         private val similarityThreshold: JsonField<Double>,
-        private val metadata: JsonValue,
+        private val bodyMetadata: JsonValue,
         private val scope: JsonField<Scope>,
         private val userId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -399,14 +458,16 @@ private constructor(
             @JsonProperty("similarity_threshold")
             @ExcludeMissing
             similarityThreshold: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("metadata") @ExcludeMissing metadata: JsonValue = JsonMissing.of(),
+            @JsonProperty("body_metadata")
+            @ExcludeMissing
+            bodyMetadata: JsonValue = JsonMissing.of(),
             @JsonProperty("scope") @ExcludeMissing scope: JsonField<Scope> = JsonMissing.of(),
             @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
         ) : this(
             minimumSimilarityThreshold,
             query,
             similarityThreshold,
-            metadata,
+            bodyMetadata,
             scope,
             userId,
             mutableMapOf(),
@@ -437,8 +498,15 @@ private constructor(
          */
         fun similarityThreshold(): Double = similarityThreshold.getRequired("similarity_threshold")
 
-        /** Additional metadata for the search */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
+        /**
+         * Additional metadata for the search
+         *
+         * This arbitrary value can be deserialized into a custom type using the `convert` method:
+         * ```java
+         * MyClass myObject = body.bodyMetadata().convert(MyClass.class);
+         * ```
+         */
+        @JsonProperty("body_metadata") @ExcludeMissing fun _bodyMetadata(): JsonValue = bodyMetadata
 
         /**
          * Search scope
@@ -454,7 +522,7 @@ private constructor(
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
-        fun userId(): Optional<String> = userId.getOptional("user_id")
+        @Deprecated("deprecated") fun userId(): Optional<String> = userId.getOptional("user_id")
 
         /**
          * Returns the raw JSON value of [minimumSimilarityThreshold].
@@ -495,7 +563,10 @@ private constructor(
          *
          * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
+        @Deprecated("deprecated")
+        @JsonProperty("user_id")
+        @ExcludeMissing
+        fun _userId(): JsonField<String> = userId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -530,7 +601,7 @@ private constructor(
             private var minimumSimilarityThreshold: JsonField<Double>? = null
             private var query: JsonField<String>? = null
             private var similarityThreshold: JsonField<Double>? = null
-            private var metadata: JsonValue = JsonMissing.of()
+            private var bodyMetadata: JsonValue = JsonMissing.of()
             private var scope: JsonField<Scope> = JsonMissing.of()
             private var userId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -540,7 +611,7 @@ private constructor(
                 minimumSimilarityThreshold = body.minimumSimilarityThreshold
                 query = body.query
                 similarityThreshold = body.similarityThreshold
-                metadata = body.metadata
+                bodyMetadata = body.bodyMetadata
                 scope = body.scope
                 userId = body.userId
                 additionalProperties = body.additionalProperties.toMutableMap()
@@ -589,7 +660,7 @@ private constructor(
             }
 
             /** Additional metadata for the search */
-            fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
+            fun bodyMetadata(bodyMetadata: JsonValue) = apply { this.bodyMetadata = bodyMetadata }
 
             /** Search scope */
             fun scope(scope: Scope) = scope(JsonField.of(scope))
@@ -604,7 +675,7 @@ private constructor(
             fun scope(scope: JsonField<Scope>) = apply { this.scope = scope }
 
             /** The ID of the user making the request */
-            fun userId(userId: String) = userId(JsonField.of(userId))
+            @Deprecated("deprecated") fun userId(userId: String) = userId(JsonField.of(userId))
 
             /**
              * Sets [Builder.userId] to an arbitrary JSON value.
@@ -613,6 +684,7 @@ private constructor(
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -653,7 +725,7 @@ private constructor(
                     checkRequired("minimumSimilarityThreshold", minimumSimilarityThreshold),
                     checkRequired("query", query),
                     checkRequired("similarityThreshold", similarityThreshold),
-                    metadata,
+                    bodyMetadata,
                     scope,
                     userId,
                     additionalProperties.toMutableMap(),
@@ -706,7 +778,7 @@ private constructor(
                 minimumSimilarityThreshold == other.minimumSimilarityThreshold &&
                 query == other.query &&
                 similarityThreshold == other.similarityThreshold &&
-                metadata == other.metadata &&
+                bodyMetadata == other.bodyMetadata &&
                 scope == other.scope &&
                 userId == other.userId &&
                 additionalProperties == other.additionalProperties
@@ -717,7 +789,7 @@ private constructor(
                 minimumSimilarityThreshold,
                 query,
                 similarityThreshold,
-                metadata,
+                bodyMetadata,
                 scope,
                 userId,
                 additionalProperties,
@@ -727,7 +799,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{minimumSimilarityThreshold=$minimumSimilarityThreshold, query=$query, similarityThreshold=$similarityThreshold, metadata=$metadata, scope=$scope, userId=$userId, additionalProperties=$additionalProperties}"
+            "Body{minimumSimilarityThreshold=$minimumSimilarityThreshold, query=$query, similarityThreshold=$similarityThreshold, bodyMetadata=$bodyMetadata, scope=$scope, userId=$userId, additionalProperties=$additionalProperties}"
     }
 
     /** Search scope */
@@ -858,19 +930,287 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /**
+     * Controls whether metadata is included in the response:
+     * - metadata=true → metadata will be included in each context item in the response.
+     * - metadata=false (or omitted) → metadata will be excluded from the response for better
+     *   performance.
+     */
+    class Metadata @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val TRUE = of("true")
+
+            @JvmField val FALSE = of("false")
+
+            @JvmStatic fun of(value: String) = Metadata(JsonField.of(value))
+        }
+
+        /** An enum containing [Metadata]'s known values. */
+        enum class Known {
+            TRUE,
+            FALSE,
+        }
+
+        /**
+         * An enum containing [Metadata]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Metadata] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            TRUE,
+            FALSE,
+            /** An enum member indicating that [Metadata] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                TRUE -> Value.TRUE
+                FALSE -> Value.FALSE
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws AlchemystAiInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                TRUE -> Known.TRUE
+                FALSE -> Known.FALSE
+                else -> throw AlchemystAiInvalidDataException("Unknown Metadata: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws AlchemystAiInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                AlchemystAiInvalidDataException("Value is not a String")
+            }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: AlchemystAiInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /**
+     * Controls the search mode:
+     * - mode=fast → prioritizes speed over completeness.
+     * - mode=standard → performs a comprehensive search (default if omitted).
+     */
+    class Mode @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val FAST = of("fast")
+
+            @JvmField val STANDARD = of("standard")
+
+            @JvmStatic fun of(value: String) = Mode(JsonField.of(value))
+        }
+
+        /** An enum containing [Mode]'s known values. */
+        enum class Known {
+            FAST,
+            STANDARD,
+        }
+
+        /**
+         * An enum containing [Mode]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Mode] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            FAST,
+            STANDARD,
+            /** An enum member indicating that [Mode] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                FAST -> Value.FAST
+                STANDARD -> Value.STANDARD
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws AlchemystAiInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                FAST -> Known.FAST
+                STANDARD -> Known.STANDARD
+                else -> throw AlchemystAiInvalidDataException("Unknown Mode: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws AlchemystAiInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                AlchemystAiInvalidDataException("Value is not a String")
+            }
+
+        private var validated: Boolean = false
+
+        fun validate(): Mode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: AlchemystAiInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Mode && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
         return other is ContextSearchParams &&
+            metadata == other.metadata &&
+            mode == other.mode &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(metadata, mode, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "ContextSearchParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ContextSearchParams{metadata=$metadata, mode=$mode, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

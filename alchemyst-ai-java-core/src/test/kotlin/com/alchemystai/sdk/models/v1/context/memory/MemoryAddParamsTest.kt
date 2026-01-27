@@ -2,7 +2,6 @@
 
 package com.alchemystai.sdk.models.v1.context.memory
 
-import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,8 +10,16 @@ internal class MemoryAddParamsTest {
     @Test
     fun create() {
         MemoryAddParams.builder()
-            .addContent(MemoryAddParams.Content.builder().content("content").build())
-            .memoryId("memoryId")
+            .addContent(
+                MemoryAddParams.Content.builder()
+                    .content("Customer asked about pricing for the Scale plan.")
+                    .metadata(
+                        MemoryAddParams.Content.Metadata.builder().messageId("messageId").build()
+                    )
+                    .build()
+            )
+            .sessionId("support-thread-TCK-1234")
+            .metadata(MemoryAddParams.Metadata.builder().addGroupName("string").build())
             .build()
     }
 
@@ -20,21 +27,56 @@ internal class MemoryAddParamsTest {
     fun body() {
         val params =
             MemoryAddParams.builder()
-                .addContent(MemoryAddParams.Content.builder().content("content").build())
-                .memoryId("memoryId")
+                .addContent(
+                    MemoryAddParams.Content.builder()
+                        .content("Customer asked about pricing for the Scale plan.")
+                        .metadata(
+                            MemoryAddParams.Content.Metadata.builder()
+                                .messageId("messageId")
+                                .build()
+                        )
+                        .build()
+                )
+                .sessionId("support-thread-TCK-1234")
+                .metadata(MemoryAddParams.Metadata.builder().addGroupName("string").build())
                 .build()
 
         val body = params._body()
 
-        assertThat(body.contents().getOrNull())
-            .containsExactly(MemoryAddParams.Content.builder().content("content").build())
-        assertThat(body.memoryId()).contains("memoryId")
+        assertThat(body.contents())
+            .containsExactly(
+                MemoryAddParams.Content.builder()
+                    .content("Customer asked about pricing for the Scale plan.")
+                    .metadata(
+                        MemoryAddParams.Content.Metadata.builder().messageId("messageId").build()
+                    )
+                    .build()
+            )
+        assertThat(body.sessionId()).isEqualTo("support-thread-TCK-1234")
+        assertThat(body.metadata())
+            .contains(MemoryAddParams.Metadata.builder().addGroupName("string").build())
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = MemoryAddParams.builder().build()
+        val params =
+            MemoryAddParams.builder()
+                .addContent(
+                    MemoryAddParams.Content.builder()
+                        .content("Customer asked about pricing for the Scale plan.")
+                        .build()
+                )
+                .sessionId("support-thread-TCK-1234")
+                .build()
 
         val body = params._body()
+
+        assertThat(body.contents())
+            .containsExactly(
+                MemoryAddParams.Content.builder()
+                    .content("Customer asked about pricing for the Scale plan.")
+                    .build()
+            )
+        assertThat(body.sessionId()).isEqualTo("support-thread-TCK-1234")
     }
 }

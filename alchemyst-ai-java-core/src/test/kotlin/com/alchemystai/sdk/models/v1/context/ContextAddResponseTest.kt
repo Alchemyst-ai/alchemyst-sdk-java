@@ -11,13 +11,27 @@ internal class ContextAddResponseTest {
 
     @Test
     fun create() {
-        val contextAddResponse = ContextAddResponse.builder().build()
+        val contextAddResponse =
+            ContextAddResponse.builder()
+                .contextId("ctx_01HXYZABC")
+                .success(true)
+                .processedDocuments(2.0)
+                .build()
+
+        assertThat(contextAddResponse.contextId()).isEqualTo("ctx_01HXYZABC")
+        assertThat(contextAddResponse.success()).isEqualTo(true)
+        assertThat(contextAddResponse.processedDocuments()).contains(2.0)
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val contextAddResponse = ContextAddResponse.builder().build()
+        val contextAddResponse =
+            ContextAddResponse.builder()
+                .contextId("ctx_01HXYZABC")
+                .success(true)
+                .processedDocuments(2.0)
+                .build()
 
         val roundtrippedContextAddResponse =
             jsonMapper.readValue(

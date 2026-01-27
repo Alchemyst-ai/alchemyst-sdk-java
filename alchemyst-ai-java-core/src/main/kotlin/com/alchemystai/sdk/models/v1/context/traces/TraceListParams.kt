@@ -6,13 +6,23 @@ import com.alchemystai.sdk.core.Params
 import com.alchemystai.sdk.core.http.Headers
 import com.alchemystai.sdk.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-/** Retrieves a list of traces for the authenticated user */
+/** Returns paginated traces for the authenticated user within their organization. */
 class TraceListParams
 private constructor(
+    private val limit: Long?,
+    private val page: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /** Number of traces per page */
+    fun limit(): Optional<Long> = Optional.ofNullable(limit)
+
+    /** Page number for pagination */
+    fun page(): Optional<Long> = Optional.ofNullable(page)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -33,14 +43,44 @@ private constructor(
     /** A builder for [TraceListParams]. */
     class Builder internal constructor() {
 
+        private var limit: Long? = null
+        private var page: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(traceListParams: TraceListParams) = apply {
+            limit = traceListParams.limit
+            page = traceListParams.page
             additionalHeaders = traceListParams.additionalHeaders.toBuilder()
             additionalQueryParams = traceListParams.additionalQueryParams.toBuilder()
         }
+
+        /** Number of traces per page */
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
+
+        /** Page number for pagination */
+        fun page(page: Long?) = apply { this.page = page }
+
+        /**
+         * Alias for [Builder.page].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun page(page: Long) = page(page as Long?)
+
+        /** Alias for calling [Builder.page] with `page.orElse(null)`. */
+        fun page(page: Optional<Long>) = page(page.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -146,12 +186,19 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): TraceListParams =
-            TraceListParams(additionalHeaders.build(), additionalQueryParams.build())
+            TraceListParams(limit, page, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                limit?.let { put("limit", it.toString()) }
+                page?.let { put("page", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -159,12 +206,15 @@ private constructor(
         }
 
         return other is TraceListParams &&
+            limit == other.limit &&
+            page == other.page &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(limit, page, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "TraceListParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TraceListParams{limit=$limit, page=$page, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

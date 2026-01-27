@@ -28,10 +28,10 @@ internal class ContextServiceAsyncTest {
         val contextFuture =
             contextServiceAsync.delete(
                 ContextDeleteParams.builder()
+                    .organizationId("org_01HXYZABC")
+                    .source("support-inbox")
                     .byDoc(true)
-                    .byId(true)
-                    .organizationId("organization_id")
-                    .source("source")
+                    .byId(false)
                     .userId("user_id")
                     .build()
             )
@@ -54,18 +54,23 @@ internal class ContextServiceAsyncTest {
             contextServiceAsync.add(
                 ContextAddParams.builder()
                     .contextType(ContextAddParams.ContextType.RESOURCE)
-                    .addDocument(ContextAddParams.Document.builder().content("content").build())
-                    .metadata(
-                        ContextAddParams.Metadata.builder()
-                            .fileName("fileName")
-                            .fileSize(0.0)
-                            .fileType("fileType")
-                            .addGroupName("string")
-                            .lastModified("lastModified")
+                    .addDocument(
+                        ContextAddParams.Document.builder()
+                            .content("Customer asked about pricing for the Scale plan.")
                             .build()
                     )
                     .scope(ContextAddParams.Scope.INTERNAL)
-                    .source("source")
+                    .source("support-inbox")
+                    .metadata(
+                        ContextAddParams.Metadata.builder()
+                            .fileName("support_thread_TCK-1234.txt")
+                            .fileSize(2048.0)
+                            .fileType("text/plain")
+                            .addGroupName("support")
+                            .addGroupName("pricing")
+                            .lastModified("2025-01-10T12:34:56.000Z")
+                            .build()
+                    )
                     .build()
             )
 
@@ -86,10 +91,12 @@ internal class ContextServiceAsyncTest {
         val responseFuture =
             contextServiceAsync.search(
                 ContextSearchParams.builder()
+                    .metadata(ContextSearchParams.Metadata.TRUE)
+                    .mode(ContextSearchParams.Mode.FAST)
                     .minimumSimilarityThreshold(0.5)
-                    .query("search query for user preferences")
+                    .query("What did the customer ask about pricing for the Scale plan?")
                     .similarityThreshold(0.8)
-                    .metadata(JsonValue.from(mapOf<String, Any>()))
+                    .bodyMetadata(JsonValue.from(mapOf<String, Any>()))
                     .scope(ContextSearchParams.Scope.INTERNAL)
                     .userId("user123")
                     .build()

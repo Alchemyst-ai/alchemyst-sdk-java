@@ -1,20 +1,30 @@
 # Alchemyst AI Java API Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.alchemystai.sdk/alchemyst-ai-java)](https://central.sonatype.com/artifact/com.alchemystai.sdk/alchemyst-ai-java/0.0.1)
-[![javadoc](https://javadoc.io/badge2/com.alchemystai.sdk/alchemyst-ai-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.alchemystai.sdk/alchemyst-ai-java/0.0.1)
+<!-- x-release-please-start-version -->
 
-The Alchemyst AI Java SDK provides convenient access to the [Alchemyst AI REST API](https://docs.getalchemystai.com) from applications written in Java.
+[![Maven Central](https://img.shields.io/maven-central/v/com.alchemystai.sdk/alchemyst-ai-java)](https://central.sonatype.com/artifact/com.alchemystai.sdk/alchemyst-ai-java/0.1.0)
+[![javadoc](https://javadoc.io/badge2/com.alchemystai.sdk/alchemyst-ai-java/0.1.0/javadoc.svg)](https://javadoc.io/doc/com.alchemystai.sdk/alchemyst-ai-java/0.1.0)
+
+<!-- x-release-please-end -->
+
+The Alchemyst AI Java SDK provides convenient access to the [Alchemyst AI REST API](https://getalchemystai.com/docs) from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [docs.getalchemystai.com](https://docs.getalchemystai.com). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.alchemystai.sdk/alchemyst-ai-java/0.0.1).
+<!-- x-release-please-start-version -->
+
+The REST API documentation can be found on [getalchemystai.com](https://getalchemystai.com/docs). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.alchemystai.sdk/alchemyst-ai-java/0.1.0).
+
+<!-- x-release-please-end -->
 
 ## Installation
+
+<!-- x-release-please-start-version -->
 
 ### Gradle
 
 ```kotlin
-implementation("com.alchemystai.sdk:alchemyst-ai-java:0.0.1")
+implementation("com.alchemystai.sdk:alchemyst-ai-java:0.1.0")
 ```
 
 ### Maven
@@ -23,9 +33,11 @@ implementation("com.alchemystai.sdk:alchemyst-ai-java:0.0.1")
 <dependency>
   <groupId>com.alchemystai.sdk</groupId>
   <artifactId>alchemyst-ai-java</artifactId>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
 </dependency>
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -48,14 +60,14 @@ ContextAddParams params = ContextAddParams.builder()
     .addDocument(ContextAddParams.Document.builder()
         .content("The content of the document")
         .build())
+    .scope(ContextAddParams.Scope.INTERNAL)
+    .source("platform.api.context.add")
     .metadata(ContextAddParams.Metadata.builder()
         .fileName("notes.txt")
         .fileType("text/plain")
         .lastModified("2025-10-01T18:42:40.419Z")
         .fileSize(1024.0)
         .build())
-    .scope(ContextAddParams.Scope.INTERNAL)
-    .source("platform.api.context.add")
     .build();
 ContextAddResponse response = client.v1().context().add(params);
 ```
@@ -160,14 +172,14 @@ ContextAddParams params = ContextAddParams.builder()
     .addDocument(ContextAddParams.Document.builder()
         .content("The content of the document")
         .build())
+    .scope(ContextAddParams.Scope.INTERNAL)
+    .source("platform.api.context.add")
     .metadata(ContextAddParams.Metadata.builder()
         .fileName("notes.txt")
         .fileType("text/plain")
         .lastModified("2025-10-01T18:42:40.419Z")
         .fileSize(1024.0)
         .build())
-    .scope(ContextAddParams.Scope.INTERNAL)
-    .source("platform.api.context.add")
     .build();
 CompletableFuture<ContextAddResponse> response = client.async().v1().context().add(params);
 ```
@@ -190,14 +202,14 @@ ContextAddParams params = ContextAddParams.builder()
     .addDocument(ContextAddParams.Document.builder()
         .content("The content of the document")
         .build())
+    .scope(ContextAddParams.Scope.INTERNAL)
+    .source("platform.api.context.add")
     .metadata(ContextAddParams.Metadata.builder()
         .fileName("notes.txt")
         .fileType("text/plain")
         .lastModified("2025-10-01T18:42:40.419Z")
         .fileSize(1024.0)
         .build())
-    .scope(ContextAddParams.Scope.INTERNAL)
-    .source("platform.api.context.add")
     .build();
 CompletableFuture<ContextAddResponse> response = client.v1().context().add(params);
 ```
@@ -221,14 +233,14 @@ ContextAddParams params = ContextAddParams.builder()
     .addDocument(ContextAddParams.Document.builder()
         .content("The content of the document")
         .build())
+    .scope(ContextAddParams.Scope.INTERNAL)
+    .source("platform.api.context.add")
     .metadata(ContextAddParams.Metadata.builder()
         .fileName("notes.txt")
         .fileType("text/plain")
         .lastModified("2025-10-01T18:42:40.419Z")
         .fileSize(1024.0)
         .build())
-    .scope(ContextAddParams.Scope.INTERNAL)
-    .source("platform.api.context.add")
     .build();
 HttpResponseFor<ContextAddResponse> response = client.v1().context().withRawResponse().add(params);
 
@@ -276,13 +288,13 @@ The SDK uses the standard [OkHttp logging interceptor](https://github.com/square
 Enable logging by setting the `ALCHEMYST_AI_LOG` environment variable to `info`:
 
 ```sh
-$ export ALCHEMYST_AI_LOG=info
+export ALCHEMYST_AI_LOG=info
 ```
 
 Or to `debug` for more verbose logging:
 
 ```sh
-$ export ALCHEMYST_AI_LOG=debug
+export ALCHEMYST_AI_LOG=debug
 ```
 
 ## ProGuard and R8
@@ -301,6 +313,8 @@ If the SDK threw an exception, but you're _certain_ the version is compatible, t
 
 > [!CAUTION]
 > We make no guarantee that the SDK works correctly when the Jackson version check is disabled.
+
+Also note that there are bugs in older Jackson versions that can affect the SDK. We don't work around all Jackson bugs ([example](https://github.com/FasterXML/jackson-databind/issues/3240)) and expect users to upgrade Jackson for those instead.
 
 ## Network options
 
@@ -339,7 +353,9 @@ To set a custom timeout, configure the method call using the `timeout` method:
 ```java
 import com.alchemystai.sdk.models.v1.context.ContextAddResponse;
 
-ContextAddResponse response = client.v1().context().add(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build());
+ContextAddResponse response = client.v1().context().add(
+  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
+);
 ```
 
 Or configure the default for all method calls at the client level:
@@ -479,14 +495,14 @@ ContextAddParams params = ContextAddParams.builder()
     .addDocument(ContextAddParams.Document.builder()
         .content("The content of the document")
         .build())
+    .scope(ContextAddParams.Scope.INTERNAL)
+    .source("platform.api.context.add")
     .metadata(ContextAddParams.Metadata.builder()
         .fileName("notes.txt")
         .fileType("text/plain")
         .lastModified("2025-10-01T18:42:40.419Z")
         .fileSize(1024.0)
         .build())
-    .scope(ContextAddParams.Scope.INTERNAL)
-    .source("platform.api.context.add")
     .build();
 ```
 
@@ -536,12 +552,12 @@ To forcibly omit a required parameter or property, pass [`JsonMissing`](alchemys
 ```java
 import com.alchemystai.sdk.core.JsonMissing;
 import com.alchemystai.sdk.models.v1.context.ContextAddParams;
-import com.alchemystai.sdk.models.v1.context.ContextSearchParams;
 
-ContextAddParams params = ContextSearchParams.builder()
-    .query("search query for user preferences")
-    .similarityThreshold(0.8)
-    .minimumSimilarityThreshold(JsonMissing.of())
+ContextAddParams params = ContextAddParams.builder()
+    .addDocument(ContextAddParams.Document.builder().build())
+    .scope(ContextAddParams.Scope.INTERNAL)
+    .source("support-inbox")
+    .contextType(JsonMissing.of())
     .build();
 ```
 
@@ -553,7 +569,7 @@ To access undocumented response properties, call the `_additionalProperties()` m
 import com.alchemystai.sdk.core.JsonValue;
 import java.util.Map;
 
-Map<String, JsonValue> additionalProperties = client.v1().context().search(params)._additionalProperties();
+Map<String, JsonValue> additionalProperties = client.v1().context().add(params)._additionalProperties();
 JsonValue secretPropertyValue = additionalProperties.get("secretProperty");
 
 String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
@@ -581,21 +597,22 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import com.alchemystai.sdk.core.JsonField;
+import com.alchemystai.sdk.models.v1.context.ContextAddParams;
 import java.util.Optional;
 
-JsonField<Double> minimumSimilarityThreshold = client.v1().context().search(params)._minimumSimilarityThreshold();
+JsonField<ContextAddParams.ContextType> contextType = client.v1().context().add(params)._contextType();
 
-if (minimumSimilarityThreshold.isMissing()) {
+if (contextType.isMissing()) {
   // The property is absent from the JSON response
-} else if (minimumSimilarityThreshold.isNull()) {
+} else if (contextType.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = minimumSimilarityThreshold.asString();
+  Optional<String> jsonString = contextType.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = minimumSimilarityThreshold.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = contextType.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 
@@ -608,9 +625,9 @@ By default, the SDK will not throw an exception in this case. It will throw [`Al
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.alchemystai.sdk.models.v1.context.ContextSearchResponse;
+import com.alchemystai.sdk.models.v1.context.ContextAddResponse;
 
-ContextSearchResponse response = client.v1().context().search(params).validate();
+ContextAddResponse response = client.v1().context().add(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
@@ -618,7 +635,9 @@ Or configure the method call to validate the response using the `responseValidat
 ```java
 import com.alchemystai.sdk.models.v1.context.ContextAddResponse;
 
-ContextAddResponse response = client.v1().context().add(RequestOptions.builder().responseValidation(true).build());
+ContextAddResponse response = client.v1().context().add(
+  params, RequestOptions.builder().responseValidation(true).build()
+);
 ```
 
 Or configure the default for all method calls at the client level:
@@ -671,4 +690,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/alchemyst-ai-sdk-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/Alchemyst-ai/alchemyst-sdk-java/issues) with questions, bugs, or suggestions.

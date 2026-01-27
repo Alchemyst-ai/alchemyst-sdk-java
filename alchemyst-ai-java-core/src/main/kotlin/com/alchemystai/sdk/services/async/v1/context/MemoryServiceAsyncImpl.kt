@@ -7,16 +7,20 @@ import com.alchemystai.sdk.core.RequestOptions
 import com.alchemystai.sdk.core.handlers.emptyHandler
 import com.alchemystai.sdk.core.handlers.errorBodyHandler
 import com.alchemystai.sdk.core.handlers.errorHandler
+import com.alchemystai.sdk.core.handlers.jsonHandler
 import com.alchemystai.sdk.core.http.HttpMethod
 import com.alchemystai.sdk.core.http.HttpRequest
 import com.alchemystai.sdk.core.http.HttpResponse
 import com.alchemystai.sdk.core.http.HttpResponse.Handler
+import com.alchemystai.sdk.core.http.HttpResponseFor
 import com.alchemystai.sdk.core.http.json
 import com.alchemystai.sdk.core.http.parseable
 import com.alchemystai.sdk.core.prepareAsync
 import com.alchemystai.sdk.models.v1.context.memory.MemoryAddParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryAddResponse
 import com.alchemystai.sdk.models.v1.context.memory.MemoryDeleteParams
 import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateParams
+import com.alchemystai.sdk.models.v1.context.memory.MemoryUpdateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -35,9 +39,9 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun update(
         params: MemoryUpdateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<Void?> =
+    ): CompletableFuture<MemoryUpdateResponse> =
         // post /api/v1/context/memory/update
-        withRawResponse().update(params, requestOptions).thenAccept {}
+        withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
     override fun delete(
         params: MemoryDeleteParams,
@@ -49,9 +53,9 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun add(
         params: MemoryAddParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<Void?> =
+    ): CompletableFuture<MemoryAddResponse> =
         // post /api/v1/context/memory/add
-        withRawResponse().add(params, requestOptions).thenAccept {}
+        withRawResponse().add(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MemoryServiceAsync.WithRawResponse {
@@ -66,12 +70,13 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val updateHandler: Handler<Void?> = emptyHandler()
+        private val updateHandler: Handler<MemoryUpdateResponse> =
+            jsonHandler<MemoryUpdateResponse>(clientOptions.jsonMapper)
 
         override fun update(
             params: MemoryUpdateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponse> {
+        ): CompletableFuture<HttpResponseFor<MemoryUpdateResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -85,7 +90,13 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
-                        response.use { updateHandler.handle(it) }
+                        response
+                            .use { updateHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }
@@ -114,12 +125,13 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val addHandler: Handler<Void?> = emptyHandler()
+        private val addHandler: Handler<MemoryAddResponse> =
+            jsonHandler<MemoryAddResponse>(clientOptions.jsonMapper)
 
         override fun add(
             params: MemoryAddParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponse> {
+        ): CompletableFuture<HttpResponseFor<MemoryAddResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -133,7 +145,13 @@ class MemoryServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
-                        response.use { addHandler.handle(it) }
+                        response
+                            .use { addHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

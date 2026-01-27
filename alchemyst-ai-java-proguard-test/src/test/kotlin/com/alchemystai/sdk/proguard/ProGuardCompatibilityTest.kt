@@ -3,11 +3,9 @@
 package com.alchemystai.sdk.proguard
 
 import com.alchemystai.sdk.client.okhttp.AlchemystAiOkHttpClient
-import com.alchemystai.sdk.core.JsonValue
 import com.alchemystai.sdk.core.jsonMapper
-import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
+import com.alchemystai.sdk.models.v1.context.ContextAddResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import java.time.OffsetDateTime
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
 import org.assertj.core.api.Assertions.assertThat
@@ -55,27 +53,21 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun contextSearchResponseRoundtrip() {
+    fun contextAddResponseRoundtrip() {
         val jsonMapper = jsonMapper()
-        val contextSearchResponse =
-            ContextSearchResponse.builder()
-                .addContext(
-                    ContextSearchResponse.Context.builder()
-                        .content("content")
-                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .metadata(JsonValue.from(mapOf<String, Any>()))
-                        .score(0.001)
-                        .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .build()
-                )
+        val contextAddResponse =
+            ContextAddResponse.builder()
+                .contextId("ctx_01HXYZABC")
+                .success(true)
+                .processedDocuments(2.0)
                 .build()
 
-        val roundtrippedContextSearchResponse =
+        val roundtrippedContextAddResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(contextSearchResponse),
-                jacksonTypeRef<ContextSearchResponse>(),
+                jsonMapper.writeValueAsString(contextAddResponse),
+                jacksonTypeRef<ContextAddResponse>(),
             )
 
-        assertThat(roundtrippedContextSearchResponse).isEqualTo(contextSearchResponse)
+        assertThat(roundtrippedContextAddResponse).isEqualTo(contextAddResponse)
     }
 }

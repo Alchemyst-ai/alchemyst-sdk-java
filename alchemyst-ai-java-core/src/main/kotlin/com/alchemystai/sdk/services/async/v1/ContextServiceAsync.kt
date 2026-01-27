@@ -11,6 +11,7 @@ import com.alchemystai.sdk.models.v1.context.ContextDeleteParams
 import com.alchemystai.sdk.models.v1.context.ContextDeleteResponse
 import com.alchemystai.sdk.models.v1.context.ContextSearchParams
 import com.alchemystai.sdk.models.v1.context.ContextSearchResponse
+import com.alchemystai.sdk.services.async.v1.context.AddAsyncServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.MemoryServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.TraceServiceAsync
 import com.alchemystai.sdk.services.async.v1.context.ViewServiceAsync
@@ -37,44 +38,33 @@ interface ContextServiceAsync {
 
     fun memory(): MemoryServiceAsync
 
-    /** Deletes context data based on provided parameters */
-    fun delete(): CompletableFuture<ContextDeleteResponse> = delete(ContextDeleteParams.none())
+    fun addAsync(): AddAsyncServiceAsync
+
+    /**
+     * This endpoint deletes context data based on the provided parameters. It returns a success or
+     * error response depending on the result from the context processor.
+     */
+    fun delete(params: ContextDeleteParams): CompletableFuture<ContextDeleteResponse> =
+        delete(params, RequestOptions.none())
 
     /** @see delete */
     fun delete(
-        params: ContextDeleteParams = ContextDeleteParams.none(),
+        params: ContextDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContextDeleteResponse>
-
-    /** @see delete */
-    fun delete(
-        params: ContextDeleteParams = ContextDeleteParams.none()
-    ): CompletableFuture<ContextDeleteResponse> = delete(params, RequestOptions.none())
-
-    /** @see delete */
-    fun delete(requestOptions: RequestOptions): CompletableFuture<ContextDeleteResponse> =
-        delete(ContextDeleteParams.none(), requestOptions)
 
     /**
      * This endpoint accepts context data and sends it to a context processor for further handling.
      * It returns a success or error response depending on the result from the context processor.
      */
-    fun add(): CompletableFuture<ContextAddResponse> = add(ContextAddParams.none())
+    fun add(params: ContextAddParams): CompletableFuture<ContextAddResponse> =
+        add(params, RequestOptions.none())
 
     /** @see add */
     fun add(
-        params: ContextAddParams = ContextAddParams.none(),
+        params: ContextAddParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ContextAddResponse>
-
-    /** @see add */
-    fun add(
-        params: ContextAddParams = ContextAddParams.none()
-    ): CompletableFuture<ContextAddResponse> = add(params, RequestOptions.none())
-
-    /** @see add */
-    fun add(requestOptions: RequestOptions): CompletableFuture<ContextAddResponse> =
-        add(ContextAddParams.none(), requestOptions)
 
     /**
      * This endpoint sends a search request to the context processor to retrieve relevant context
@@ -109,55 +99,35 @@ interface ContextServiceAsync {
 
         fun memory(): MemoryServiceAsync.WithRawResponse
 
+        fun addAsync(): AddAsyncServiceAsync.WithRawResponse
+
         /**
          * Returns a raw HTTP response for `post /api/v1/context/delete`, but is otherwise the same
          * as [ContextServiceAsync.delete].
          */
-        fun delete(): CompletableFuture<HttpResponseFor<ContextDeleteResponse>> =
-            delete(ContextDeleteParams.none())
-
-        /** @see delete */
         fun delete(
-            params: ContextDeleteParams = ContextDeleteParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ContextDeleteResponse>>
-
-        /** @see delete */
-        fun delete(
-            params: ContextDeleteParams = ContextDeleteParams.none()
+            params: ContextDeleteParams
         ): CompletableFuture<HttpResponseFor<ContextDeleteResponse>> =
             delete(params, RequestOptions.none())
 
         /** @see delete */
         fun delete(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<ContextDeleteResponse>> =
-            delete(ContextDeleteParams.none(), requestOptions)
+            params: ContextDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContextDeleteResponse>>
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/add`, but is otherwise the same as
          * [ContextServiceAsync.add].
          */
-        fun add(): CompletableFuture<HttpResponseFor<ContextAddResponse>> =
-            add(ContextAddParams.none())
-
-        /** @see add */
-        fun add(
-            params: ContextAddParams = ContextAddParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ContextAddResponse>>
-
-        /** @see add */
-        fun add(
-            params: ContextAddParams = ContextAddParams.none()
-        ): CompletableFuture<HttpResponseFor<ContextAddResponse>> =
+        fun add(params: ContextAddParams): CompletableFuture<HttpResponseFor<ContextAddResponse>> =
             add(params, RequestOptions.none())
 
         /** @see add */
         fun add(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<ContextAddResponse>> =
-            add(ContextAddParams.none(), requestOptions)
+            params: ContextAddParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContextAddResponse>>
 
         /**
          * Returns a raw HTTP response for `post /api/v1/context/search`, but is otherwise the same

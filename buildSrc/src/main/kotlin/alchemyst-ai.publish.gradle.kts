@@ -11,7 +11,7 @@ configure<PublishingExtension> {
             pom {
                 name.set("Alchemyst AI API v1 documentation")
                 description.set("v1 API documentation for Alchemyst AI")
-                url.set("https://docs.getalchemystai.com")
+                url.set("https://getalchemystai.com/docs")
 
                 licenses {
                     license {
@@ -27,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/alchemyst-ai-sdk-java.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/alchemyst-ai-sdk-java.git")
-                    url.set("https://github.com/stainless-sdks/alchemyst-ai-sdk-java")
+                    connection.set("scm:git:git://github.com/Alchemyst-ai/alchemyst-sdk-java.git")
+                    developerConnection.set("scm:git:git://github.com/Alchemyst-ai/alchemyst-sdk-java.git")
+                    url.set("https://github.com/Alchemyst-ai/alchemyst-sdk-java")
                 }
 
                 versionMapping {
@@ -37,6 +37,14 @@ configure<PublishingExtension> {
                         fromResolutionResult()
                     }
                 }
+            }
+        }
+    }
+    repositories {
+        if (project.hasProperty("publishLocal")) {
+            maven {
+                name = "LocalFileSystem"
+                url = uri("${rootProject.layout.buildDirectory.get()}/local-maven-repo")
             }
         }
     }

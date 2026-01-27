@@ -11,13 +11,46 @@ internal class ViewDocsResponseTest {
 
     @Test
     fun create() {
-        val viewDocsResponse = ViewDocsResponse.builder().build()
+        val viewDocsResponse =
+            ViewDocsResponse.builder()
+                .addDocument(
+                    ViewDocsResponse.Document.builder()
+                        .fileName("fileName")
+                        .fileSize(0.0)
+                        .fileType("fileType")
+                        .addGroupName("string")
+                        .lastModified("lastModified")
+                        .build()
+                )
+                .build()
+
+        assertThat(viewDocsResponse.documents())
+            .containsExactly(
+                ViewDocsResponse.Document.builder()
+                    .fileName("fileName")
+                    .fileSize(0.0)
+                    .fileType("fileType")
+                    .addGroupName("string")
+                    .lastModified("lastModified")
+                    .build()
+            )
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val viewDocsResponse = ViewDocsResponse.builder().build()
+        val viewDocsResponse =
+            ViewDocsResponse.builder()
+                .addDocument(
+                    ViewDocsResponse.Document.builder()
+                        .fileName("fileName")
+                        .fileSize(0.0)
+                        .fileType("fileType")
+                        .addGroupName("string")
+                        .lastModified("lastModified")
+                        .build()
+                )
+                .build()
 
         val roundtrippedViewDocsResponse =
             jsonMapper.readValue(

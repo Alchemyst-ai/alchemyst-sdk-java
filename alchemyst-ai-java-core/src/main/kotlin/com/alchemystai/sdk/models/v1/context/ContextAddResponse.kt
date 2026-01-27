@@ -3,19 +3,79 @@
 package com.alchemystai.sdk.models.v1.context
 
 import com.alchemystai.sdk.core.ExcludeMissing
+import com.alchemystai.sdk.core.JsonField
+import com.alchemystai.sdk.core.JsonMissing
 import com.alchemystai.sdk.core.JsonValue
+import com.alchemystai.sdk.core.checkRequired
 import com.alchemystai.sdk.errors.AlchemystAiInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 
 class ContextAddResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+private constructor(
+    private val contextId: JsonField<String>,
+    private val success: JsonField<Boolean>,
+    private val processedDocuments: JsonField<Double>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
+) {
 
-    @JsonCreator private constructor() : this(mutableMapOf())
+    @JsonCreator
+    private constructor(
+        @JsonProperty("context_id") @ExcludeMissing contextId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("success") @ExcludeMissing success: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("processed_documents")
+        @ExcludeMissing
+        processedDocuments: JsonField<Double> = JsonMissing.of(),
+    ) : this(contextId, success, processedDocuments, mutableMapOf())
+
+    /**
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun contextId(): String = contextId.getRequired("context_id")
+
+    /**
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun success(): Boolean = success.getRequired("success")
+
+    /**
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun processedDocuments(): Optional<Double> =
+        processedDocuments.getOptional("processed_documents")
+
+    /**
+     * Returns the raw JSON value of [contextId].
+     *
+     * Unlike [contextId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("context_id") @ExcludeMissing fun _contextId(): JsonField<String> = contextId
+
+    /**
+     * Returns the raw JSON value of [success].
+     *
+     * Unlike [success], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("success") @ExcludeMissing fun _success(): JsonField<Boolean> = success
+
+    /**
+     * Returns the raw JSON value of [processedDocuments].
+     *
+     * Unlike [processedDocuments], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("processed_documents")
+    @ExcludeMissing
+    fun _processedDocuments(): JsonField<Double> = processedDocuments
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -31,18 +91,67 @@ private constructor(private val additionalProperties: MutableMap<String, JsonVal
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [ContextAddResponse]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [ContextAddResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .contextId()
+         * .success()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [ContextAddResponse]. */
     class Builder internal constructor() {
 
+        private var contextId: JsonField<String>? = null
+        private var success: JsonField<Boolean>? = null
+        private var processedDocuments: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(contextAddResponse: ContextAddResponse) = apply {
+            contextId = contextAddResponse.contextId
+            success = contextAddResponse.success
+            processedDocuments = contextAddResponse.processedDocuments
             additionalProperties = contextAddResponse.additionalProperties.toMutableMap()
+        }
+
+        fun contextId(contextId: String) = contextId(JsonField.of(contextId))
+
+        /**
+         * Sets [Builder.contextId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.contextId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun contextId(contextId: JsonField<String>) = apply { this.contextId = contextId }
+
+        fun success(success: Boolean) = success(JsonField.of(success))
+
+        /**
+         * Sets [Builder.success] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.success] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun success(success: JsonField<Boolean>) = apply { this.success = success }
+
+        fun processedDocuments(processedDocuments: Double) =
+            processedDocuments(JsonField.of(processedDocuments))
+
+        /**
+         * Sets [Builder.processedDocuments] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.processedDocuments] with a well-typed [Double] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun processedDocuments(processedDocuments: JsonField<Double>) = apply {
+            this.processedDocuments = processedDocuments
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -68,8 +177,22 @@ private constructor(private val additionalProperties: MutableMap<String, JsonVal
          * Returns an immutable instance of [ContextAddResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .contextId()
+         * .success()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ContextAddResponse = ContextAddResponse(additionalProperties.toMutableMap())
+        fun build(): ContextAddResponse =
+            ContextAddResponse(
+                checkRequired("contextId", contextId),
+                checkRequired("success", success),
+                processedDocuments,
+                additionalProperties.toMutableMap(),
+            )
     }
 
     private var validated: Boolean = false
@@ -79,6 +202,9 @@ private constructor(private val additionalProperties: MutableMap<String, JsonVal
             return@apply
         }
 
+        contextId()
+        success()
+        processedDocuments()
         validated = true
     }
 
@@ -95,19 +221,30 @@ private constructor(private val additionalProperties: MutableMap<String, JsonVal
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic internal fun validity(): Int = 0
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (contextId.asKnown().isPresent) 1 else 0) +
+            (if (success.asKnown().isPresent) 1 else 0) +
+            (if (processedDocuments.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is ContextAddResponse && additionalProperties == other.additionalProperties
+        return other is ContextAddResponse &&
+            contextId == other.contextId &&
+            success == other.success &&
+            processedDocuments == other.processedDocuments &&
+            additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(contextId, success, processedDocuments, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "ContextAddResponse{additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "ContextAddResponse{contextId=$contextId, success=$success, processedDocuments=$processedDocuments, additionalProperties=$additionalProperties}"
 }

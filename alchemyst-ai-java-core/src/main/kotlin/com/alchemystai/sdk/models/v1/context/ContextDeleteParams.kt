@@ -7,6 +7,7 @@ import com.alchemystai.sdk.core.JsonField
 import com.alchemystai.sdk.core.JsonMissing
 import com.alchemystai.sdk.core.JsonValue
 import com.alchemystai.sdk.core.Params
+import com.alchemystai.sdk.core.checkRequired
 import com.alchemystai.sdk.core.http.Headers
 import com.alchemystai.sdk.core.http.QueryParams
 import com.alchemystai.sdk.errors.AlchemystAiInvalidDataException
@@ -19,13 +20,32 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Deletes context data based on provided parameters */
+/**
+ * This endpoint deletes context data based on the provided parameters. It returns a success or
+ * error response depending on the result from the context processor.
+ */
 class ContextDeleteParams
 private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /**
+     * Organization ID
+     *
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun organizationId(): String = body.organizationId()
+
+    /**
+     * Source identifier for the context
+     *
+     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun source(): String = body.source()
 
     /**
      * Flag to delete by document
@@ -44,42 +64,12 @@ private constructor(
     fun byId(): Optional<Boolean> = body.byId()
 
     /**
-     * Optional organization ID
-     *
-     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun organizationId(): Optional<String> = body.organizationId()
-
-    /**
-     * Source identifier for the context
-     *
-     * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun source(): Optional<String> = body.source()
-
-    /**
      * Optional user ID
      *
      * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun userId(): Optional<String> = body.userId()
-
-    /**
-     * Returns the raw JSON value of [byDoc].
-     *
-     * Unlike [byDoc], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _byDoc(): JsonField<Boolean> = body._byDoc()
-
-    /**
-     * Returns the raw JSON value of [byId].
-     *
-     * Unlike [byId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _byId(): JsonField<Boolean> = body._byId()
+    @Deprecated("deprecated") fun userId(): Optional<String> = body.userId()
 
     /**
      * Returns the raw JSON value of [organizationId].
@@ -96,11 +86,25 @@ private constructor(
     fun _source(): JsonField<String> = body._source()
 
     /**
+     * Returns the raw JSON value of [byDoc].
+     *
+     * Unlike [byDoc], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _byDoc(): JsonField<Boolean> = body._byDoc()
+
+    /**
+     * Returns the raw JSON value of [byId].
+     *
+     * Unlike [byId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _byId(): JsonField<Boolean> = body._byId()
+
+    /**
      * Returns the raw JSON value of [userId].
      *
      * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _userId(): JsonField<String> = body._userId()
+    @Deprecated("deprecated") fun _userId(): JsonField<String> = body._userId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -114,9 +118,15 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): ContextDeleteParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [ContextDeleteParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [ContextDeleteParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .organizationId()
+         * .source()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -139,14 +149,39 @@ private constructor(
          *
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [byDoc]
-         * - [byId]
          * - [organizationId]
          * - [source]
+         * - [byDoc]
+         * - [byId]
          * - [userId]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /** Organization ID */
+        fun organizationId(organizationId: String) = apply { body.organizationId(organizationId) }
+
+        /**
+         * Sets [Builder.organizationId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.organizationId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun organizationId(organizationId: JsonField<String>) = apply {
+            body.organizationId(organizationId)
+        }
+
+        /** Source identifier for the context */
+        fun source(source: String) = apply { body.source(source) }
+
+        /**
+         * Sets [Builder.source] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.source] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun source(source: JsonField<String>) = apply { body.source(source) }
 
         /** Flag to delete by document */
         fun byDoc(byDoc: Boolean?) = apply { body.byDoc(byDoc) }
@@ -190,40 +225,11 @@ private constructor(
          */
         fun byId(byId: JsonField<Boolean>) = apply { body.byId(byId) }
 
-        /** Optional organization ID */
-        fun organizationId(organizationId: String?) = apply { body.organizationId(organizationId) }
-
-        /** Alias for calling [Builder.organizationId] with `organizationId.orElse(null)`. */
-        fun organizationId(organizationId: Optional<String>) =
-            organizationId(organizationId.getOrNull())
-
-        /**
-         * Sets [Builder.organizationId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.organizationId] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun organizationId(organizationId: JsonField<String>) = apply {
-            body.organizationId(organizationId)
-        }
-
-        /** Source identifier for the context */
-        fun source(source: String) = apply { body.source(source) }
-
-        /**
-         * Sets [Builder.source] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.source] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun source(source: JsonField<String>) = apply { body.source(source) }
-
         /** Optional user ID */
-        fun userId(userId: String?) = apply { body.userId(userId) }
+        @Deprecated("deprecated") fun userId(userId: String?) = apply { body.userId(userId) }
 
         /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
-        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+        @Deprecated("deprecated") fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
         /**
          * Sets [Builder.userId] to an arbitrary JSON value.
@@ -231,6 +237,7 @@ private constructor(
          * You should usually call [Builder.userId] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
+        @Deprecated("deprecated")
         fun userId(userId: JsonField<String>) = apply { body.userId(userId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -354,6 +361,14 @@ private constructor(
          * Returns an immutable instance of [ContextDeleteParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .organizationId()
+         * .source()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ContextDeleteParams =
             ContextDeleteParams(
@@ -372,24 +387,40 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val byDoc: JsonField<Boolean>,
-        private val byId: JsonField<Boolean>,
         private val organizationId: JsonField<String>,
         private val source: JsonField<String>,
+        private val byDoc: JsonField<Boolean>,
+        private val byId: JsonField<Boolean>,
         private val userId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("by_doc") @ExcludeMissing byDoc: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("by_id") @ExcludeMissing byId: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("organization_id")
             @ExcludeMissing
             organizationId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("source") @ExcludeMissing source: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("by_doc") @ExcludeMissing byDoc: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("by_id") @ExcludeMissing byId: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
-        ) : this(byDoc, byId, organizationId, source, userId, mutableMapOf())
+        ) : this(organizationId, source, byDoc, byId, userId, mutableMapOf())
+
+        /**
+         * Organization ID
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun organizationId(): String = organizationId.getRequired("organization_id")
+
+        /**
+         * Source identifier for the context
+         *
+         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun source(): String = source.getRequired("source")
 
         /**
          * Flag to delete by document
@@ -408,42 +439,12 @@ private constructor(
         fun byId(): Optional<Boolean> = byId.getOptional("by_id")
 
         /**
-         * Optional organization ID
-         *
-         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun organizationId(): Optional<String> = organizationId.getOptional("organization_id")
-
-        /**
-         * Source identifier for the context
-         *
-         * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun source(): Optional<String> = source.getOptional("source")
-
-        /**
          * Optional user ID
          *
          * @throws AlchemystAiInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
-        fun userId(): Optional<String> = userId.getOptional("user_id")
-
-        /**
-         * Returns the raw JSON value of [byDoc].
-         *
-         * Unlike [byDoc], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("by_doc") @ExcludeMissing fun _byDoc(): JsonField<Boolean> = byDoc
-
-        /**
-         * Returns the raw JSON value of [byId].
-         *
-         * Unlike [byId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("by_id") @ExcludeMissing fun _byId(): JsonField<Boolean> = byId
+        @Deprecated("deprecated") fun userId(): Optional<String> = userId.getOptional("user_id")
 
         /**
          * Returns the raw JSON value of [organizationId].
@@ -463,11 +464,28 @@ private constructor(
         @JsonProperty("source") @ExcludeMissing fun _source(): JsonField<String> = source
 
         /**
+         * Returns the raw JSON value of [byDoc].
+         *
+         * Unlike [byDoc], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("by_doc") @ExcludeMissing fun _byDoc(): JsonField<Boolean> = byDoc
+
+        /**
+         * Returns the raw JSON value of [byId].
+         *
+         * Unlike [byId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("by_id") @ExcludeMissing fun _byId(): JsonField<Boolean> = byId
+
+        /**
          * Returns the raw JSON value of [userId].
          *
          * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
+        @Deprecated("deprecated")
+        @JsonProperty("user_id")
+        @ExcludeMissing
+        fun _userId(): JsonField<String> = userId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -483,29 +501,64 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [Body]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .organizationId()
+             * .source()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
+            private var organizationId: JsonField<String>? = null
+            private var source: JsonField<String>? = null
             private var byDoc: JsonField<Boolean> = JsonMissing.of()
             private var byId: JsonField<Boolean> = JsonMissing.of()
-            private var organizationId: JsonField<String> = JsonMissing.of()
-            private var source: JsonField<String> = JsonMissing.of()
             private var userId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
-                byDoc = body.byDoc
-                byId = body.byId
                 organizationId = body.organizationId
                 source = body.source
+                byDoc = body.byDoc
+                byId = body.byId
                 userId = body.userId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
+
+            /** Organization ID */
+            fun organizationId(organizationId: String) =
+                organizationId(JsonField.of(organizationId))
+
+            /**
+             * Sets [Builder.organizationId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.organizationId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun organizationId(organizationId: JsonField<String>) = apply {
+                this.organizationId = organizationId
+            }
+
+            /** Source identifier for the context */
+            fun source(source: String) = source(JsonField.of(source))
+
+            /**
+             * Sets [Builder.source] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.source] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun source(source: JsonField<String>) = apply { this.source = source }
 
             /** Flag to delete by document */
             fun byDoc(byDoc: Boolean?) = byDoc(JsonField.ofNullable(byDoc))
@@ -551,41 +604,12 @@ private constructor(
              */
             fun byId(byId: JsonField<Boolean>) = apply { this.byId = byId }
 
-            /** Optional organization ID */
-            fun organizationId(organizationId: String?) =
-                organizationId(JsonField.ofNullable(organizationId))
-
-            /** Alias for calling [Builder.organizationId] with `organizationId.orElse(null)`. */
-            fun organizationId(organizationId: Optional<String>) =
-                organizationId(organizationId.getOrNull())
-
-            /**
-             * Sets [Builder.organizationId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.organizationId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun organizationId(organizationId: JsonField<String>) = apply {
-                this.organizationId = organizationId
-            }
-
-            /** Source identifier for the context */
-            fun source(source: String) = source(JsonField.of(source))
-
-            /**
-             * Sets [Builder.source] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.source] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun source(source: JsonField<String>) = apply { this.source = source }
-
             /** Optional user ID */
+            @Deprecated("deprecated")
             fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
             /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+            @Deprecated("deprecated")
             fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
             /**
@@ -595,6 +619,7 @@ private constructor(
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -620,13 +645,21 @@ private constructor(
              * Returns an immutable instance of [Body].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .organizationId()
+             * .source()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Body =
                 Body(
+                    checkRequired("organizationId", organizationId),
+                    checkRequired("source", source),
                     byDoc,
                     byId,
-                    organizationId,
-                    source,
                     userId,
                     additionalProperties.toMutableMap(),
                 )
@@ -639,10 +672,10 @@ private constructor(
                 return@apply
             }
 
-            byDoc()
-            byId()
             organizationId()
             source()
+            byDoc()
+            byId()
             userId()
             validated = true
         }
@@ -663,10 +696,10 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (byDoc.asKnown().isPresent) 1 else 0) +
-                (if (byId.asKnown().isPresent) 1 else 0) +
-                (if (organizationId.asKnown().isPresent) 1 else 0) +
+            (if (organizationId.asKnown().isPresent) 1 else 0) +
                 (if (source.asKnown().isPresent) 1 else 0) +
+                (if (byDoc.asKnown().isPresent) 1 else 0) +
+                (if (byId.asKnown().isPresent) 1 else 0) +
                 (if (userId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -675,22 +708,22 @@ private constructor(
             }
 
             return other is Body &&
-                byDoc == other.byDoc &&
-                byId == other.byId &&
                 organizationId == other.organizationId &&
                 source == other.source &&
+                byDoc == other.byDoc &&
+                byId == other.byId &&
                 userId == other.userId &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(byDoc, byId, organizationId, source, userId, additionalProperties)
+            Objects.hash(organizationId, source, byDoc, byId, userId, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{byDoc=$byDoc, byId=$byId, organizationId=$organizationId, source=$source, userId=$userId, additionalProperties=$additionalProperties}"
+            "Body{organizationId=$organizationId, source=$source, byDoc=$byDoc, byId=$byId, userId=$userId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
